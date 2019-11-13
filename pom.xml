@@ -35,5 +35,20 @@
             </build>
         </profile>
     </profiles>
+
+    <!-- <repositories>
+        <repository>
+            <id>redhat-ga-repository</id>
+            <name>Redhat GA Repository</name>
+            <url>http://artifactory.dit-iaggs.com/artifactory/libs-release-iag/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>redhat-ga-repository</id>
+            <name>Redhat GA Repository</name>
+            <url>http://artifactory.dit-iaggs.com/artifactory/libs-release-iag/</url>
+        </pluginRepository>
+    </pluginRepositories> -->
 </project>
 

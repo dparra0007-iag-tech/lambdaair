@@ -185,7 +185,7 @@
         </profile>
     </profiles>
 
-    <repositories>
+    <!-- <repositories>
         <repository>
             <id>redhat-ga-repository</id>
             <name>Redhat GA Repository</name>
@@ -198,6 +198,6 @@
             <name>Redhat GA Repository</name>
             <url>https://maven.repository.redhat.com/ga/all/</url>
         </pluginRepository>
-    </pluginRepositories>
+    </pluginRepositories> -->
 
 </project>
