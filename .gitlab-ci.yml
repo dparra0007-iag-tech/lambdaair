@@ -15,14 +15,18 @@ stages:
 # - regression test deploy
 # - cleanup
 
+variables:
+  BUILD_NAME: $CI_PROJECT_NAME
+
 build_airports_service_java:
   stage: build code
   image: maven:3.3.9-jdk-8
   before_script:
     - cd ./Airports
     - curl -fL https://getcli.jfrog.io | sh
-    # - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
-    - ./jfrog rt config --url=http://artifactory.dit-iaggs.com/artifactory --user=user --password=v4XtEZlvt5qF
+    - echo $ARTIFACTORY_URL
+    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+    # - ./jfrog rt config --url=http://artifactory.dit-iaggs.com/artifactory --user=user --password=v4XtEZlvt5qF
     - ./jfrog rt c show
     - export M2_HOME=/usr/share/maven
     - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
