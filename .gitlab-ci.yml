@@ -1,0 +1,37 @@
+image: iagtech/docker:1.0.0-public
+
+services:
+  - name: iagtech/docker-dind:1.0.0-public
+    alias: docker
+
+stages:
+- build code
+# - test code
+# - build application
+# - review application
+# - test application
+# - push binaries
+# - deploy application
+# - regression test deploy
+# - cleanup
+
+build_airports_service_java:
+  stage: build code
+  image: iaghcp-docker-technical-architecture.jfrog.io/maven:3.3.9-jdk-8
+  before_script:
+    - cd ./Airports
+    - curl -fL https://getcli.jfrog.io | sh
+    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+    - ./jfrog rt c show
+    - export M2_HOME=/usr/share/maven
+    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+  script:
+    - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Airports-$BUILD_NAME --build-number=$CI_PIPELINE_ID
+    - ./jfrog rt bce Airports-$BUILD_NAME $CI_PIPELINE_ID
+    - ./jfrog rt bp Airports-$BUILD_NAME $CI_PIPELINE_ID
+  artifacts:
+    paths:
+      - ./Airports/target/*
+  except:
+    - triggers
