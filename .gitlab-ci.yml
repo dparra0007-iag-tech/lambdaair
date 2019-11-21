@@ -17,7 +17,7 @@ stages:
 
 build_airports_service_java:
   stage: build code
-  image: iaghcp-docker-technical-architecture.jfrog.io/maven:3.3.9-jdk-8
+  image: maven:3.3.9-jdk-8
   before_script:
     - cd ./Airports
     - curl -fL https://getcli.jfrog.io | sh
