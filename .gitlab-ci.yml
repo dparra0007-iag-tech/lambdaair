@@ -6,7 +6,7 @@ services:
 
 stages:
 - build code
-# - test code
+- test code
 # - build application
 # - review application
 # - test application
@@ -17,6 +17,8 @@ stages:
 
 variables:
   BUILD_NAME: $CI_PROJECT_NAME
+
+### build code ###
 
 build_airports_service_java:
   stage: build code
@@ -143,3 +145,105 @@ build_zuul_service_java:
       - ./Zuul/target/*
   except:
     - triggers
+
+  ### build code ###
+
+  ### test code ###
+
+unit_integration_test_airports_service:
+  stage: test code
+  image: maven:3.3.9-jdk-8
+  before_script:
+    - cd ./Airports
+    -  curl -fL https://getcli.jfrog.io | sh
+    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+    - ./jfrog rt c show
+    - export M2_HOME=/usr/share/maven
+    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+  script:
+    - ./jfrog rt mvn "test" configuration.yml --build-name=Airports-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
+  except:
+    - triggers
+
+unit_integration_test_flights_service:
+  stage: test code
+  image: maven:3.3.9-jdk-8
+  before_script:
+    - cd ./Airports
+    -  curl -fL https://getcli.jfrog.io | sh
+    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+    - ./jfrog rt c show
+    - export M2_HOME=/usr/share/maven
+    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+  script:
+    - ./jfrog rt mvn "test" configuration.yml --build-name=Flights-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
+  except:
+    - triggers
+
+unit_integration_test_presentation_service:
+  stage: test code
+  image: maven:3.3.9-jdk-8
+  before_script:
+    - cd ./Airports
+    -  curl -fL https://getcli.jfrog.io | sh
+    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+    - ./jfrog rt c show
+    - export M2_HOME=/usr/share/maven
+    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+  script:
+    - ./jfrog rt mvn "test" configuration.yml --build-name=Presentation-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
+  except:
+    - triggers
+
+unit_integration_test_sales_service:
+  stage: test code
+  image: maven:3.3.9-jdk-8
+  before_script:
+    - cd ./Airports
+    -  curl -fL https://getcli.jfrog.io | sh
+    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+    - ./jfrog rt c show
+    - export M2_HOME=/usr/share/maven
+    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+  script:
+    - ./jfrog rt mvn "test" configuration.yml --build-name=Sales-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
+  except:
+    - triggers
+
+unit_integration_test_fsalesv2_service:
+  stage: test code
+  image: maven:3.3.9-jdk-8
+  before_script:
+    - cd ./Airports
+    -  curl -fL https://getcli.jfrog.io | sh
+    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+    - ./jfrog rt c show
+    - export M2_HOME=/usr/share/maven
+    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+  script:
+    - ./jfrog rt mvn "test" configuration.yml --build-name=Salesv2-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
+  except:
+    - triggers
+
+unit_integration_test_zuul_service:
+  stage: test code
+  image: maven:3.3.9-jdk-8
+  before_script:
+    - cd ./Airports
+    -  curl -fL https://getcli.jfrog.io | sh
+    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+    - ./jfrog rt c show
+    - export M2_HOME=/usr/share/maven
+    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+  script:
+    - ./jfrog rt mvn "test" configuration.yml --build-name=Zuul-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
+  except:
+    - triggers
+
+### test code ###
