@@ -38,3 +38,108 @@ build_airports_service_java:
       - ./Airports/target/*
   except:
     - triggers
+
+build_flights_service_java:
+  stage: build code
+  image: maven:3.3.9-jdk-8
+  before_script:
+    - cd ./Flights
+    - curl -fL https://getcli.jfrog.io | sh
+    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+    - ./jfrog rt c show
+    - export M2_HOME=/usr/share/maven
+    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+  script:
+    - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Flights-$BUILD_NAME --build-number=$CI_PIPELINE_ID
+    - ./jfrog rt bce Flights-$BUILD_NAME $CI_PIPELINE_ID
+    - ./jfrog rt bp Flights-$BUILD_NAME $CI_PIPELINE_ID
+  artifacts:
+    paths:
+      - ./Flights/target/*
+  except:
+    - triggers
+
+build_presentation_service_java:
+  stage: build code
+  image: maven:3.3.9-jdk-8
+  before_script:
+    - cd ./Presentation
+    - curl -fL https://getcli.jfrog.io | sh
+    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+    - ./jfrog rt c show
+    - export M2_HOME=/usr/share/maven
+    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+  script:
+    - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Presentation-$BUILD_NAME --build-number=$CI_PIPELINE_ID
+    - ./jfrog rt bce Presentation-$BUILD_NAME $CI_PIPELINE_ID
+    - ./jfrog rt bp Presentation-$BUILD_NAME $CI_PIPELINE_ID
+  artifacts:
+    paths:
+      - ./Presentation/target/*
+  except:
+    - triggers
+
+build_sales_service_java:
+  stage: build code
+  image: maven:3.3.9-jdk-8
+  before_script:
+    - cd ./Sales
+    - curl -fL https://getcli.jfrog.io | sh
+    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+    - ./jfrog rt c show
+    - export M2_HOME=/usr/share/maven
+    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+  script:
+    - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Sales-$BUILD_NAME --build-number=$CI_PIPELINE_ID
+    - ./jfrog rt bce Sales-$BUILD_NAME $CI_PIPELINE_ID
+    - ./jfrog rt bp Sales-$BUILD_NAME $CI_PIPELINE_ID
+  artifacts:
+    paths:
+      - ./Sales/target/*
+  except:
+    - triggers
+
+build_salesv2_service_java:
+  stage: build code
+  image: maven:3.3.9-jdk-8
+  before_script:
+    - cd ./Salesv2
+    - curl -fL https://getcli.jfrog.io | sh
+    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+    - ./jfrog rt c show
+    - export M2_HOME=/usr/share/maven
+    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+  script:
+    - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Salesv2-$BUILD_NAME --build-number=$CI_PIPELINE_ID
+    - ./jfrog rt bce Salesv2-$BUILD_NAME $CI_PIPELINE_ID
+    - ./jfrog rt bp Salesv2-$BUILD_NAME $CI_PIPELINE_ID
+  artifacts:
+    paths:
+      - ./Salesv2/target/*
+  except:
+    - triggers
+
+build_zuul_service_java:
+  stage: build code
+  image: maven:3.3.9-jdk-8
+  before_script:
+    - cd ./Zuul
+    - curl -fL https://getcli.jfrog.io | sh
+    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+    - ./jfrog rt c show
+    - export M2_HOME=/usr/share/maven
+    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+  script:
+    - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Zuul-$BUILD_NAME --build-number=$CI_PIPELINE_ID
+    - ./jfrog rt bce Zuul-$BUILD_NAME $CI_PIPELINE_ID
+    - ./jfrog rt bp Zuul-$BUILD_NAME $CI_PIPELINE_ID
+  artifacts:
+    paths:
+      - ./Zuul/target/*
+  except:
+    - triggers
