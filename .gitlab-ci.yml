@@ -284,8 +284,6 @@ build_airport_service:
     - make build PATH=./Airports SERVICE_REGISTRY=$GITLAB_SERVICE_REGISTRY BASH=$BASH
     - docker tag $GITLAB_SERVICE_REGISTRY $GITLAB_SERVICE_REGISTRY:$CI_COMMIT_REF_NAME
     - docker push $GITLAB_SERVICE_REGISTRY:$CI_COMMIT_REF_NAME
-  dependencies:
-    - build_service_java
   except:
     - triggers
 
