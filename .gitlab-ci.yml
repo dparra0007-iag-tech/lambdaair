@@ -258,7 +258,7 @@ static_test_flight_service:
     - docker run --rm -v $(pwd):/data -w /data iagtech/sonar-scanner:2.0.1 sonar-scanner
      -Dsonar.projectKey=${PROJECT_KEY//[\/]/_}
      -Dsonar.projectName=$CI_PROJECT_NAME 
-     -Dsonar.branch.name=$CI_COMMIT_REF_NAME 
+    #  -Dsonar.branch.name=$CI_COMMIT_REF_NAME 
      -Dsonar.projectVersion=$CI_JOB_ID
      -Dsonar.sources=./Airports/src 
      -Dsonar.java.binaries=./Airports/target 
