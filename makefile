@@ -8,8 +8,7 @@ endif
 
 .PHONY: build
 build:
-	# $(BASH)s2i build -e JAR_NAME=iaggbs.springcloud.demo-1.4.1.RELEASE.jar -e INCREMENTAL=false ${PATH} iaghcp-docker-technical-architecture.jfrog.io/s2i-springboot:1.0.0 ${SERVICE_REGISTRY}
-	$(BASH)mvn fabric8:build -f ${PATH} -Popenshift	
+	$(BASH)s2i build -e JAR_NAME=iaggbs.springcloud.demo-1.4.1.RELEASE.jar -e INCREMENTAL=false ${PATH} iaghcp-docker-technical-architecture.jfrog.io/s2i-springboot:1.0.0 ${SERVICE_REGISTRY}
 
 .PHONY: compose
 compose:
