@@ -252,8 +252,8 @@ static_test_flight_service:
   stage: test code
   variables:
     PROJECT_KEY: "$CI_PROJECT_NAMESPACE:$CI_PROJECT_NAME"
-  before_script:
-    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
+  # before_script:
+  #   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
   script:
     - docker run --rm -v $(pwd):/data -w /data iagtech/sonar-scanner:2.0.1 sonar-scanner
      -Dsonar.projectKey=${PROJECT_KEY//[\/]/_}
@@ -265,8 +265,8 @@ static_test_flight_service:
      -Dsonar.gitlab.project_id=$CI_PROJECT_ID 
      -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA 
      -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
-  after_script:
-    - docker logout
+  # after_script:
+  #   - docker logout
   except:
     - triggers
 
