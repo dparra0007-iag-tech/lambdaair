@@ -17,12 +17,12 @@ stages:
 
 variables:
   BUILD_NAME: $CI_PROJECT_NAME
-  GITLAB_AIRPORTS_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/LambdaAir/airports
-  GITLAB_FLIGHTS_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/LambdaAir/flights
-  GITLAB_PRESENTATION_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/LambdaAir/presentation
-  GITLAB_SALES_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/LambdaAir/sales
-  GITLAB_SALESV2_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/LambdaAir/salesv2
-  GITLAB_ZUUL_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/LambdaAir/zuul
+  GITLAB_AIRPORTS_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/airports
+  GITLAB_FLIGHTS_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/flights
+  GITLAB_PRESENTATION_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/presentation
+  GITLAB_SALES_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/sales
+  GITLAB_SALESV2_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/salesv2
+  GITLAB_ZUUL_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/zuul
 
 ### build code ###
 
