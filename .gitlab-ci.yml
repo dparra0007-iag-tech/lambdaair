@@ -17,7 +17,12 @@ stages:
 
 variables:
   BUILD_NAME: $CI_PROJECT_NAME
-  GITLAB_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/LambdaAir/LambdaAir
+  GITLAB_AIRPORTS_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/LambdaAir/airports
+  GITLAB_FLIGHTS_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/LambdaAir/flights
+  GITLAB_PRESENTATION_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/LambdaAir/presentation
+  GITLAB_SALES_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/LambdaAir/sales
+  GITLAB_SALESV2_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/LambdaAir/salesv2
+  GITLAB_ZUUL_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/LambdaAir/zuul
 
 ### build code ###
 
@@ -391,9 +396,9 @@ build_airport_service:
     BASH: /usr/local/bin/
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - make build PATH=./Airports SERVICE_REGISTRY=$GITLAB_SERVICE_REGISTRY BASH=$BASH JAR_NAME=airports-1.0-SANPSHOT.jar
-    - docker tag $GITLAB_SERVICE_REGISTRY $GITLAB_SERVICE_REGISTRY:$CI_COMMIT_REF_NAME
-    - docker push $GITLAB_SERVICE_REGISTRY:$CI_COMMIT_REF_NAME
+    - make build PATH=./Airports SERVICE_REGISTRY=$GITLAB_AIRPORTS_SERVICE_REGISTRY BASH=$BASH JAR_NAME=airports-1.0-SANPSHOT.jar
+    - docker tag $GITLAB_AIRPORTS_SERVICE_REGISTRY $GITLAB_AIRPORTS_SERVICE_REGISTRY:$CI_COMMIT_REF_NAME
+    - docker push $GITLAB_AIRPORTS_SERVICE_REGISTRY:$CI_COMMIT_REF_NAME
   dependencies:
     - build_airports_service_java
   except:
