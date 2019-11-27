@@ -17,6 +17,7 @@ stages:
 
 variables:
   BUILD_NAME: $CI_PROJECT_NAME
+  GITLAB_SERVICE_REGISTRY: registry.gitlab.com/iag-dev/glp/LambdaAir/LambdaAir
 
 ### build code ###
 
