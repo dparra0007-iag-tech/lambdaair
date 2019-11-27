@@ -473,8 +473,6 @@ build_airport_service:
 
 push_airports_service_binaries:
   stage: push binaries
-  tags:
-    - docker-push
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
     - docker pull $GITLAB_AIRPORTS_SERVICE_REGISTRY:$CI_COMMIT_REF_NAME
