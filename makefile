@@ -8,12 +8,12 @@ endif
 
 .PHONY: build
 build:
-	$(BASH)s2i build -e JAR_NAME=iaggbs.springcloud.demo-1.4.1.RELEASE.jar -e INCREMENTAL=false ${PATH} iaghcp-docker-technical-architecture.jfrog.io/s2i-springboot:1.0.0 ${SERVICE_REGISTRY}
+	$(BASH)s2i build -e JAR_NAME=${JAR_NAME} -e INCREMENTAL=false ${PATH} iagtech/s2i-springboot:1.0.0-public ${SERVICE_REGISTRY}
 
 .PHONY: compose
 compose:
 	$(BASH)docker rmi composed-greetingapi || true
-	$(BASH)s2i build -e JAR_NAME=iaggbs.springcloud.demo-1.4.1.RELEASE.jar -e INCREMENTAL=false ./greetingapi iaghcp-docker-technical-architecture.jfrog.io/s2i-springboot:1.0.0 composed-greetingapi
+	$(BASH)s2i build -e JAR_NAME=${JAR_NAME} -e INCREMENTAL=false ./greetingapi iagtech/s2i-springboot:1.0.0-public composed-greetingapi
 	$(BASH)docker-compose $(COMPOSE_FILE) up -d
 	
 .PHONY: push

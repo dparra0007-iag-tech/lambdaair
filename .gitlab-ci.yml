@@ -41,360 +41,361 @@ build_airports_service_java:
   except:
     - triggers
 
-build_flights_service_java:
-  stage: build code
-  image: maven:3.3.9-jdk-8
-  before_script:
-    - cd ./Flights
-    - curl -fL https://getcli.jfrog.io | sh
-    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
-    - ./jfrog rt c show
-    - export M2_HOME=/usr/share/maven
-    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
-    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
-  script:
-    - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Flights-$BUILD_NAME --build-number=$CI_PIPELINE_ID
-    - ./jfrog rt bce Flights-$BUILD_NAME $CI_PIPELINE_ID
-    - ./jfrog rt bp Flights-$BUILD_NAME $CI_PIPELINE_ID
-  artifacts:
-    paths:
-      - ./Flights/target/*
-  except:
-    - triggers
+# build_flights_service_java:
+#   stage: build code
+#   image: maven:3.3.9-jdk-8
+#   before_script:
+#     - cd ./Flights
+#     - curl -fL https://getcli.jfrog.io | sh
+#     - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+#     - ./jfrog rt c show
+#     - export M2_HOME=/usr/share/maven
+#     - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+#     - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+#   script:
+#     - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Flights-$BUILD_NAME --build-number=$CI_PIPELINE_ID
+#     - ./jfrog rt bce Flights-$BUILD_NAME $CI_PIPELINE_ID
+#     - ./jfrog rt bp Flights-$BUILD_NAME $CI_PIPELINE_ID
+#   artifacts:
+#     paths:
+#       - ./Flights/target/*
+#   except:
+#     - triggers
 
-build_presentation_service_java:
-  stage: build code
-  image: maven:3.3.9-jdk-8
-  before_script:
-    - cd ./Presentation
-    - curl -fL https://getcli.jfrog.io | sh
-    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
-    - ./jfrog rt c show
-    - export M2_HOME=/usr/share/maven
-    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
-    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
-  script:
-    - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Presentation-$BUILD_NAME --build-number=$CI_PIPELINE_ID
-    - ./jfrog rt bce Presentation-$BUILD_NAME $CI_PIPELINE_ID
-    - ./jfrog rt bp Presentation-$BUILD_NAME $CI_PIPELINE_ID
-  artifacts:
-    paths:
-      - ./Presentation/target/*
-  except:
-    - triggers
+# build_presentation_service_java:
+#   stage: build code
+#   image: maven:3.3.9-jdk-8
+#   before_script:
+#     - cd ./Presentation
+#     - curl -fL https://getcli.jfrog.io | sh
+#     - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+#     - ./jfrog rt c show
+#     - export M2_HOME=/usr/share/maven
+#     - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+#     - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+#   script:
+#     - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Presentation-$BUILD_NAME --build-number=$CI_PIPELINE_ID
+#     - ./jfrog rt bce Presentation-$BUILD_NAME $CI_PIPELINE_ID
+#     - ./jfrog rt bp Presentation-$BUILD_NAME $CI_PIPELINE_ID
+#   artifacts:
+#     paths:
+#       - ./Presentation/target/*
+#   except:
+#     - triggers
 
-build_sales_service_java:
-  stage: build code
-  image: maven:3.3.9-jdk-8
-  before_script:
-    - cd ./Sales
-    - curl -fL https://getcli.jfrog.io | sh
-    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
-    - ./jfrog rt c show
-    - export M2_HOME=/usr/share/maven
-    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
-    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
-  script:
-    - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Sales-$BUILD_NAME --build-number=$CI_PIPELINE_ID
-    - ./jfrog rt bce Sales-$BUILD_NAME $CI_PIPELINE_ID
-    - ./jfrog rt bp Sales-$BUILD_NAME $CI_PIPELINE_ID
-  artifacts:
-    paths:
-      - ./Sales/target/*
-  except:
-    - triggers
+# build_sales_service_java:
+#   stage: build code
+#   image: maven:3.3.9-jdk-8
+#   before_script:
+#     - cd ./Sales
+#     - curl -fL https://getcli.jfrog.io | sh
+#     - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+#     - ./jfrog rt c show
+#     - export M2_HOME=/usr/share/maven
+#     - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+#     - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+#   script:
+#     - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Sales-$BUILD_NAME --build-number=$CI_PIPELINE_ID
+#     - ./jfrog rt bce Sales-$BUILD_NAME $CI_PIPELINE_ID
+#     - ./jfrog rt bp Sales-$BUILD_NAME $CI_PIPELINE_ID
+#   artifacts:
+#     paths:
+#       - ./Sales/target/*
+#   except:
+#     - triggers
 
-build_salesv2_service_java:
-  stage: build code
-  image: maven:3.3.9-jdk-8
-  before_script:
-    - cd ./Salesv2
-    - curl -fL https://getcli.jfrog.io | sh
-    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
-    - ./jfrog rt c show
-    - export M2_HOME=/usr/share/maven
-    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
-    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
-  script:
-    - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Salesv2-$BUILD_NAME --build-number=$CI_PIPELINE_ID
-    - ./jfrog rt bce Salesv2-$BUILD_NAME $CI_PIPELINE_ID
-    - ./jfrog rt bp Salesv2-$BUILD_NAME $CI_PIPELINE_ID
-  artifacts:
-    paths:
-      - ./Salesv2/target/*
-  except:
-    - triggers
+# build_salesv2_service_java:
+#   stage: build code
+#   image: maven:3.3.9-jdk-8
+#   before_script:
+#     - cd ./Salesv2
+#     - curl -fL https://getcli.jfrog.io | sh
+#     - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+#     - ./jfrog rt c show
+#     - export M2_HOME=/usr/share/maven
+#     - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+#     - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+#   script:
+#     - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Salesv2-$BUILD_NAME --build-number=$CI_PIPELINE_ID
+#     - ./jfrog rt bce Salesv2-$BUILD_NAME $CI_PIPELINE_ID
+#     - ./jfrog rt bp Salesv2-$BUILD_NAME $CI_PIPELINE_ID
+#   artifacts:
+#     paths:
+#       - ./Salesv2/target/*
+#   except:
+#     - triggers
 
-build_zuul_service_java:
-  stage: build code
-  image: maven:3.3.9-jdk-8
-  before_script:
-    - cd ./Zuul
-    - curl -fL https://getcli.jfrog.io | sh
-    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
-    - ./jfrog rt c show
-    - export M2_HOME=/usr/share/maven
-    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
-    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
-  script:
-    - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Zuul-$BUILD_NAME --build-number=$CI_PIPELINE_ID
-    - ./jfrog rt bce Zuul-$BUILD_NAME $CI_PIPELINE_ID
-    - ./jfrog rt bp Zuul-$BUILD_NAME $CI_PIPELINE_ID
-  artifacts:
-    paths:
-      - ./Zuul/target/*
-  except:
-    - triggers
+# build_zuul_service_java:
+#   stage: build code
+#   image: maven:3.3.9-jdk-8
+#   before_script:
+#     - cd ./Zuul
+#     - curl -fL https://getcli.jfrog.io | sh
+#     - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+#     - ./jfrog rt c show
+#     - export M2_HOME=/usr/share/maven
+#     - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+#     - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+#   script:
+#     - ./jfrog rt mvn "clean install package" configuration.yml --build-name=Zuul-$BUILD_NAME --build-number=$CI_PIPELINE_ID
+#     - ./jfrog rt bce Zuul-$BUILD_NAME $CI_PIPELINE_ID
+#     - ./jfrog rt bp Zuul-$BUILD_NAME $CI_PIPELINE_ID
+#   artifacts:
+#     paths:
+#       - ./Zuul/target/*
+#   except:
+#     - triggers
 
-#   ### build code ###
+# #   ### build code ###
 
-#   ### test code ###
+# #   ### test code ###
 
-unit_integration_test_airports_service:
-  stage: test code
-  image: maven:3.3.9-jdk-8
-  before_script:
-    - cd ./Airports
-    -  curl -fL https://getcli.jfrog.io | sh
-    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
-    - ./jfrog rt c show
-    - export M2_HOME=/usr/share/maven
-    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
-    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
-  script:
-    - ./jfrog rt mvn "test" configuration.yml --build-name=Airports-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
-  except:
-    - triggers
+# unit_integration_test_airports_service:
+#   stage: test code
+#   image: maven:3.3.9-jdk-8
+#   before_script:
+#     - cd ./Airports
+#     -  curl -fL https://getcli.jfrog.io | sh
+#     - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+#     - ./jfrog rt c show
+#     - export M2_HOME=/usr/share/maven
+#     - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+#     - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+#   script:
+#     - ./jfrog rt mvn "test" configuration.yml --build-name=Airports-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
+#   except:
+#     - triggers
 
-unit_integration_test_flights_service:
-  stage: test code
-  image: maven:3.3.9-jdk-8
-  before_script:
-    - cd ./Airports
-    -  curl -fL https://getcli.jfrog.io | sh
-    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
-    - ./jfrog rt c show
-    - export M2_HOME=/usr/share/maven
-    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
-    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
-  script:
-    - ./jfrog rt mvn "test" configuration.yml --build-name=Flights-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
-  except:
-    - triggers
+# unit_integration_test_flights_service:
+#   stage: test code
+#   image: maven:3.3.9-jdk-8
+#   before_script:
+#     - cd ./Airports
+#     -  curl -fL https://getcli.jfrog.io | sh
+#     - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+#     - ./jfrog rt c show
+#     - export M2_HOME=/usr/share/maven
+#     - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+#     - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+#   script:
+#     - ./jfrog rt mvn "test" configuration.yml --build-name=Flights-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
+#   except:
+#     - triggers
 
-unit_integration_test_presentation_service:
-  stage: test code
-  image: maven:3.3.9-jdk-8
-  before_script:
-    - cd ./Airports
-    -  curl -fL https://getcli.jfrog.io | sh
-    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
-    - ./jfrog rt c show
-    - export M2_HOME=/usr/share/maven
-    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
-    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
-  script:
-    - ./jfrog rt mvn "test" configuration.yml --build-name=Presentation-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
-  except:
-    - triggers
+# unit_integration_test_presentation_service:
+#   stage: test code
+#   image: maven:3.3.9-jdk-8
+#   before_script:
+#     - cd ./Airports
+#     -  curl -fL https://getcli.jfrog.io | sh
+#     - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+#     - ./jfrog rt c show
+#     - export M2_HOME=/usr/share/maven
+#     - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+#     - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+#   script:
+#     - ./jfrog rt mvn "test" configuration.yml --build-name=Presentation-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
+#   except:
+#     - triggers
 
-unit_integration_test_sales_service:
-  stage: test code
-  image: maven:3.3.9-jdk-8
-  before_script:
-    - cd ./Airports
-    -  curl -fL https://getcli.jfrog.io | sh
-    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
-    - ./jfrog rt c show
-    - export M2_HOME=/usr/share/maven
-    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
-    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
-  script:
-    - ./jfrog rt mvn "test" configuration.yml --build-name=Sales-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
-  except:
-    - triggers
+# unit_integration_test_sales_service:
+#   stage: test code
+#   image: maven:3.3.9-jdk-8
+#   before_script:
+#     - cd ./Airports
+#     -  curl -fL https://getcli.jfrog.io | sh
+#     - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+#     - ./jfrog rt c show
+#     - export M2_HOME=/usr/share/maven
+#     - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+#     - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+#   script:
+#     - ./jfrog rt mvn "test" configuration.yml --build-name=Sales-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
+#   except:
+#     - triggers
 
-unit_integration_test_fsalesv2_service:
-  stage: test code
-  image: maven:3.3.9-jdk-8
-  before_script:
-    - cd ./Airports
-    -  curl -fL https://getcli.jfrog.io | sh
-    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
-    - ./jfrog rt c show
-    - export M2_HOME=/usr/share/maven
-    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
-    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
-  script:
-    - ./jfrog rt mvn "test" configuration.yml --build-name=Salesv2-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
-  except:
-    - triggers
+# unit_integration_test_fsalesv2_service:
+#   stage: test code
+#   image: maven:3.3.9-jdk-8
+#   before_script:
+#     - cd ./Airports
+#     -  curl -fL https://getcli.jfrog.io | sh
+#     - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+#     - ./jfrog rt c show
+#     - export M2_HOME=/usr/share/maven
+#     - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+#     - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+#   script:
+#     - ./jfrog rt mvn "test" configuration.yml --build-name=Salesv2-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
+#   except:
+#     - triggers
 
-unit_integration_test_zuul_service:
-  stage: test code
-  image: maven:3.3.9-jdk-8
-  before_script:
-    - cd ./Airports
-    -  curl -fL https://getcli.jfrog.io | sh
-    - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
-    - ./jfrog rt c show
-    - export M2_HOME=/usr/share/maven
-    - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
-    - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
-  script:
-    - ./jfrog rt mvn "test" configuration.yml --build-name=Zuul-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
-  except:
-    - triggers
+# unit_integration_test_zuul_service:
+#   stage: test code
+#   image: maven:3.3.9-jdk-8
+#   before_script:
+#     - cd ./Airports
+#     -  curl -fL https://getcli.jfrog.io | sh
+#     - ./jfrog rt config --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASS
+#     - ./jfrog rt c show
+#     - export M2_HOME=/usr/share/maven
+#     - sed -i 's,MAVEN_SNAPSHOT_REPO_KEY,'"$MAVEN_SNAPSHOT_REPO_KEY"',g' configuration.yml
+#     - sed -i 's,MAVEN_RELEASE_REPO_KEY,'"$MAVEN_RELEASE_REPO_KEY"',g' configuration.yml
+#   script:
+#     - ./jfrog rt mvn "test" configuration.yml --build-name=Zuul-$BUILD_NAME-Test --build-number=$CI_PIPELINE_ID
+#   except:
+#     - triggers
 
-# ---------------
+# # ---------------
 
-static_test_airports_service:
-  stage: test code
-  variables:
-    PROJECT_KEY: "$CI_PROJECT_NAMESPACE:$CI_PROJECT_NAME"
-  # before_script:
-  #   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
-  script:
-    - docker run --rm -v $(pwd):/data -w /data iagtech/sonar-scanner:2.0.1 sonar-scanner
-     -Dsonar.projectKey=${PROJECT_KEY//[\/]/_}_Airports
-     -Dsonar.projectName=$CI_PROJECT_NAME_Airports 
-     -Dsonar.branch.name=$CI_COMMIT_REF_NAME 
-     -Dsonar.projectVersion=$CI_JOB_ID
-     -Dsonar.sources=./Airports/src 
-     -Dsonar.java.binaries=./Airports/target 
-     -Dsonar.gitlab.project_id=$CI_PROJECT_ID_Airports 
-     -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA 
-     -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
-  # after_script:
-  #   - docker logout
-  except:
-    - triggers
+# static_test_airports_service:
+#   stage: test code
+#   variables:
+#     PROJECT_KEY: "$CI_PROJECT_NAMESPACE:$CI_PROJECT_NAME"
+#   # before_script:
+#   #   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
+#   script:
+#     - docker run --rm -v $(pwd):/data -w /data iagtech/sonar-scanner:2.0.1 sonar-scanner
+#      -Dsonar.projectKey=${PROJECT_KEY//[\/]/_}_Airports
+#      -Dsonar.projectName=$CI_PROJECT_NAME_Airports 
+#      -Dsonar.branch.name=$CI_COMMIT_REF_NAME 
+#      -Dsonar.projectVersion=$CI_JOB_ID
+#      -Dsonar.sources=./Airports/src 
+#      -Dsonar.java.binaries=./Airports/target 
+#      -Dsonar.gitlab.project_id=$CI_PROJECT_ID_Airports 
+#      -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA 
+#      -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
+#   # after_script:
+#   #   - docker logout
+#   except:
+#     - triggers
 
-static_test_flights_service:
-  stage: test code
-  variables:
-    PROJECT_KEY: "$CI_PROJECT_NAMESPACE:$CI_PROJECT_NAME"
-  # before_script:
-  #   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
-  script:
-    - docker run --rm -v $(pwd):/data -w /data iagtech/sonar-scanner:2.0.1 sonar-scanner
-     -Dsonar.projectKey=${PROJECT_KEY//[\/]/_}_Flights
-     -Dsonar.projectName=$CI_PROJECT_NAME_Flights 
-     -Dsonar.branch.name=$CI_COMMIT_REF_NAME 
-     -Dsonar.projectVersion=$CI_JOB_ID
-     -Dsonar.sources=./Flights/src 
-     -Dsonar.java.binaries=./Flights/target 
-     -Dsonar.gitlab.project_id=$CI_PROJECT_ID_Flights 
-     -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA 
-     -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
-  # after_script:
-  #   - docker logout
-  except:
-    - triggers
+# static_test_flights_service:
+#   stage: test code
+#   variables:
+#     PROJECT_KEY: "$CI_PROJECT_NAMESPACE:$CI_PROJECT_NAME"
+#   # before_script:
+#   #   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
+#   script:
+#     - docker run --rm -v $(pwd):/data -w /data iagtech/sonar-scanner:2.0.1 sonar-scanner
+#      -Dsonar.projectKey=${PROJECT_KEY//[\/]/_}_Flights
+#      -Dsonar.projectName=$CI_PROJECT_NAME_Flights 
+#      -Dsonar.branch.name=$CI_COMMIT_REF_NAME 
+#      -Dsonar.projectVersion=$CI_JOB_ID
+#      -Dsonar.sources=./Flights/src 
+#      -Dsonar.java.binaries=./Flights/target 
+#      -Dsonar.gitlab.project_id=$CI_PROJECT_ID_Flights 
+#      -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA 
+#      -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
+#   # after_script:
+#   #   - docker logout
+#   except:
+#     - triggers
 
-static_test_presentation_service:
-  stage: test code
-  variables:
-    PROJECT_KEY: "$CI_PROJECT_NAMESPACE:$CI_PROJECT_NAME"
-  # before_script:
-  #   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
-  script:
-    - docker run --rm -v $(pwd):/data -w /data iagtech/sonar-scanner:2.0.1 sonar-scanner
-     -Dsonar.projectKey=${PROJECT_KEY//[\/]/_}_Presentation
-     -Dsonar.projectName=$CI_PROJECT_NAME_Presentation 
-     -Dsonar.branch.name=$CI_COMMIT_REF_NAME 
-     -Dsonar.projectVersion=$CI_JOB_ID
-     -Dsonar.sources=./Presentation/src 
-     -Dsonar.java.binaries=./Presentation/target 
-     -Dsonar.gitlab.project_id=$CI_PROJECT_ID_Presentation 
-     -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA 
-     -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
-  # after_script:
-  #   - docker logout
-  except:
-    - triggers
+# static_test_presentation_service:
+#   stage: test code
+#   variables:
+#     PROJECT_KEY: "$CI_PROJECT_NAMESPACE:$CI_PROJECT_NAME"
+#   # before_script:
+#   #   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
+#   script:
+#     - docker run --rm -v $(pwd):/data -w /data iagtech/sonar-scanner:2.0.1 sonar-scanner
+#      -Dsonar.projectKey=${PROJECT_KEY//[\/]/_}_Presentation
+#      -Dsonar.projectName=$CI_PROJECT_NAME_Presentation 
+#      -Dsonar.branch.name=$CI_COMMIT_REF_NAME 
+#      -Dsonar.projectVersion=$CI_JOB_ID
+#      -Dsonar.sources=./Presentation/src 
+#      -Dsonar.java.binaries=./Presentation/target 
+#      -Dsonar.gitlab.project_id=$CI_PROJECT_ID_Presentation 
+#      -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA 
+#      -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
+#   # after_script:
+#   #   - docker logout
+#   except:
+#     - triggers
 
-static_test_sales_service:
-  stage: test code
-  variables:
-    PROJECT_KEY: "$CI_PROJECT_NAMESPACE:$CI_PROJECT_NAME"
-  # before_script:
-  #   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
-  script:
-    - docker run --rm -v $(pwd):/data -w /data iagtech/sonar-scanner:2.0.1 sonar-scanner
-     -Dsonar.projectKey=${PROJECT_KEY//[\/]/_}_Sales
-     -Dsonar.projectName=$CI_PROJECT_NAME_Sales 
-     -Dsonar.branch.name=$CI_COMMIT_REF_NAME 
-     -Dsonar.projectVersion=$CI_JOB_ID
-     -Dsonar.sources=./Sales/src 
-     -Dsonar.java.binaries=./Sales/target 
-     -Dsonar.gitlab.project_id=$CI_PROJECT_ID_Sales 
-     -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA 
-     -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
-  # after_script:
-  #   - docker logout
-  except:
-    - triggers
+# static_test_sales_service:
+#   stage: test code
+#   variables:
+#     PROJECT_KEY: "$CI_PROJECT_NAMESPACE:$CI_PROJECT_NAME"
+#   # before_script:
+#   #   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
+#   script:
+#     - docker run --rm -v $(pwd):/data -w /data iagtech/sonar-scanner:2.0.1 sonar-scanner
+#      -Dsonar.projectKey=${PROJECT_KEY//[\/]/_}_Sales
+#      -Dsonar.projectName=$CI_PROJECT_NAME_Sales 
+#      -Dsonar.branch.name=$CI_COMMIT_REF_NAME 
+#      -Dsonar.projectVersion=$CI_JOB_ID
+#      -Dsonar.sources=./Sales/src 
+#      -Dsonar.java.binaries=./Sales/target 
+#      -Dsonar.gitlab.project_id=$CI_PROJECT_ID_Sales 
+#      -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA 
+#      -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
+#   # after_script:
+#   #   - docker logout
+#   except:
+#     - triggers
 
-static_test_salesv2_service:
-  stage: test code
-  variables:
-    PROJECT_KEY: "$CI_PROJECT_NAMESPACE:$CI_PROJECT_NAME"
-  # before_script:
-  #   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
-  script:
-    - docker run --rm -v $(pwd):/data -w /data iagtech/sonar-scanner:2.0.1 sonar-scanner
-     -Dsonar.projectKey=${PROJECT_KEY//[\/]/_}_Salesv2
-     -Dsonar.projectName=$CI_PROJECT_NAME_Salesv2 
-     -Dsonar.branch.name=$CI_COMMIT_REF_NAME 
-     -Dsonar.projectVersion=$CI_JOB_ID
-     -Dsonar.sources=./Salesv2/src 
-     -Dsonar.java.binaries=./Salesv2/target 
-     -Dsonar.gitlab.project_id=$CI_PROJECT_ID_Salesv2 
-     -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA 
-     -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
-  # after_script:
-  #   - docker logout
-  except:
-    - triggers
+# static_test_salesv2_service:
+#   stage: test code
+#   variables:
+#     PROJECT_KEY: "$CI_PROJECT_NAMESPACE:$CI_PROJECT_NAME"
+#   # before_script:
+#   #   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
+#   script:
+#     - docker run --rm -v $(pwd):/data -w /data iagtech/sonar-scanner:2.0.1 sonar-scanner
+#      -Dsonar.projectKey=${PROJECT_KEY//[\/]/_}_Salesv2
+#      -Dsonar.projectName=$CI_PROJECT_NAME_Salesv2 
+#      -Dsonar.branch.name=$CI_COMMIT_REF_NAME 
+#      -Dsonar.projectVersion=$CI_JOB_ID
+#      -Dsonar.sources=./Salesv2/src 
+#      -Dsonar.java.binaries=./Salesv2/target 
+#      -Dsonar.gitlab.project_id=$CI_PROJECT_ID_Salesv2 
+#      -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA 
+#      -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
+#   # after_script:
+#   #   - docker logout
+#   except:
+#     - triggers
 
-static_test_zuul_service:
-  stage: test code
-  variables:
-    PROJECT_KEY: "$CI_PROJECT_NAMESPACE:$CI_PROJECT_NAME"
-  # before_script:
-  #   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
-  script:
-    - docker run --rm -v $(pwd):/data -w /data iagtech/sonar-scanner:2.0.1 sonar-scanner
-     -Dsonar.projectKey=${PROJECT_KEY//[\/]/_}_Zuul
-     -Dsonar.projectName=$CI_PROJECT_NAME_Zuul 
-     -Dsonar.branch.name=$CI_COMMIT_REF_NAME 
-     -Dsonar.projectVersion=$CI_JOB_ID
-     -Dsonar.sources=./Zuul/src 
-     -Dsonar.java.binaries=./Zuul/target 
-     -Dsonar.gitlab.project_id=$CI_PROJECT_ID_Zuul 
-     -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA 
-     -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
-  # after_script:
-  #   - docker logout
-  except:
-    - triggers
+# static_test_zuul_service:
+#   stage: test code
+#   variables:
+#     PROJECT_KEY: "$CI_PROJECT_NAMESPACE:$CI_PROJECT_NAME"
+#   # before_script:
+#   #   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS
+#   script:
+#     - docker run --rm -v $(pwd):/data -w /data iagtech/sonar-scanner:2.0.1 sonar-scanner
+#      -Dsonar.projectKey=${PROJECT_KEY//[\/]/_}_Zuul
+#      -Dsonar.projectName=$CI_PROJECT_NAME_Zuul 
+#      -Dsonar.branch.name=$CI_COMMIT_REF_NAME 
+#      -Dsonar.projectVersion=$CI_JOB_ID
+#      -Dsonar.sources=./Zuul/src 
+#      -Dsonar.java.binaries=./Zuul/target 
+#      -Dsonar.gitlab.project_id=$CI_PROJECT_ID_Zuul 
+#      -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA 
+#      -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
+#   # after_script:
+#   #   - docker logout
+#   except:
+#     - triggers
 
 ### test code ###
 
 ### build application ###
 
-# build_airport_service:
-#   stage: build application
-#   image: fabric8/maven-builder:v4e87df6
-#   variables:
-#     BASH: /usr/local/bin/
-#   script:
-#     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-#     - make build PATH=./Airports SERVICE_REGISTRY=$GITLAB_SERVICE_REGISTRY BASH=$BASH
-#     - docker tag $GITLAB_SERVICE_REGISTRY $GITLAB_SERVICE_REGISTRY:$CI_COMMIT_REF_NAME
-#     - docker push $GITLAB_SERVICE_REGISTRY:$CI_COMMIT_REF_NAME
-#   except:
-#     - triggers
+build_airport_service:
+  stage: build application
+  variables:
+    BASH: /usr/local/bin/
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - make build PATH=./Airports SERVICE_REGISTRY=$GITLAB_SERVICE_REGISTRY BASH=$BASH JAR_NAME=airports-1.0-SANPSHOT.jar
+    - docker tag $GITLAB_SERVICE_REGISTRY $GITLAB_SERVICE_REGISTRY:$CI_COMMIT_REF_NAME
+    - docker push $GITLAB_SERVICE_REGISTRY:$CI_COMMIT_REF_NAME
+  dependencies:
+    - build_airports_service_java
+  except:
+    - triggers
 
 ### build application ###
