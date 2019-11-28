@@ -18,16 +18,16 @@ compose:
 	
 .PHONY: push
 push:
-	$(BASH)echo "VERSION=${VERSION}"
-	$(BASH)docker tag ${CONTAINER_SERVICE_IMAGE} ${CONTAINER_SERVICE_IMAGE}:${VERSION}
+	echo "VERSION=${VERSION}"
+	docker tag ${CONTAINER_SERVICE_IMAGE} ${CONTAINER_SERVICE_IMAGE}:${VERSION}
 	# $(BASH)jfrog rt config --url=${ARTIFACTORY_URL} --user=${ARTIFACTORY_USER} --password=${ARTIFACTORY_PASS}
 	# $(BASH)jfrog rt c show
 	# $(BASH)jfrog rt dp ${CONTAINER_SERVICE_IMAGE}:${VERSION} ${DOCKER_REPO_KEY} --build-name=${BUILD_NAME} --build-number=${CI_PIPELINE_ID}
 	# $(BASH)jfrog rt bce ${BUILD_NAME} ${CI_PIPELINE_ID}
 	# $(BASH)jfrog rt bp ${BUILD_NAME} ${CI_PIPELINE_ID}
-	$(BASH)docker login -u ${ARTIFACTORY_USER} -p ${ARTIFACTORY_PASS}
-	$(BASH)docker push ${CONTAINER_SERVICE_IMAGE}
-	$(BASH)docker logout
+	docker login -u ${ARTIFACTORY_USER} -p ${ARTIFACTORY_PASS}
+	docker push ${CONTAINER_SERVICE_IMAGE}
+	docker logout
                                                                                                                                                                
 deploy:
 	@oc describe -f ${DEPLOYMENT_FILE} && ([ $$? -eq 0 ] && oc replace -f ${DEPLOYMENT_FILE}) || ( oc create -f ${DEPLOYMENT_FILE} || echo "DEPLOYMENT REPLACED." )
