@@ -11,7 +11,7 @@ stages:
 # - review application
 # - test application
 - push binaries
-# - deploy application
+- deploy application
 # - regression test deploy
 # - cleanup
 
