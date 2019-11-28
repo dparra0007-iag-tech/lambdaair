@@ -467,6 +467,20 @@ build_salesv2_service:
   except:
     - triggers
 
+build_zuul_service:
+  stage: build application
+  variables:
+    BASH: /usr/local/bin/
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - make build PATH=./Zuul SERVICE_REGISTRY=$GITLAB_ZUUL_SERVICE_REGISTRY BASH=$BASH JAR_NAME=zuul-1.0-SANPSHOT.jar
+    - docker tag $GITLAB_ZUUL_SERVICE_REGISTRY $GITLAB_ZUUL_SERVICE_REGISTRY:$CI_COMMIT_REF_NAME
+    - docker push $GITLAB_ZUUL_SERVICE_REGISTRY:$CI_COMMIT_REF_NAME
+  dependencies:
+    - build_zuul_service_java
+  except:
+    - triggers
+
 ### build application ###
 
 ### push application ###
@@ -495,7 +509,7 @@ push_flights_service_binaries:
   except:
     - triggers
 
-push_flights_service_binaries:
+push_presentation_service_binaries:
   stage: push binaries
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
@@ -507,7 +521,7 @@ push_flights_service_binaries:
   except:
     - triggers
 
-push_flights_service_binaries:
+push_sales_service_binaries:
   stage: push binaries
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
@@ -519,7 +533,7 @@ push_flights_service_binaries:
   except:
     - triggers
 
-push_flights_service_binaries:
+push_salesv2_service_binaries:
   stage: push binaries
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
@@ -531,7 +545,7 @@ push_flights_service_binaries:
   except:
     - triggers
 
-push_flights_service_binaries:
+push_zuul_service_binaries:
   stage: push binaries
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
