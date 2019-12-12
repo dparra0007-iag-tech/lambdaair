@@ -11,13 +11,13 @@ items:
   spec:
     tags:
     - annotations:
-        openshift.io/imported-from: {{IMG_AIRPORTS_SERVICE}}:{{TAG_AIRPORTS_SERVICE}}
+        openshift.io/imported-from: {{IMG_AIRPORTS_SERVICE}}:{{CI_TAG_AIRPORTS_SERVICE}}
       from:
         kind: DockerImage
-        name: {{IMG_AIRPORTS_SERVICE}}:{{TAG_AIRPORTS_SERVICE}}
+        name: {{IMG_AIRPORTS_SERVICE}}:{{CI_TAG_AIRPORTS_SERVICE}}
       generation: null
       importPolicy: {}
-      name: "{{TAG_AIRPORTS_SERVICE}}"
+      name: "{{CI_TAG_AIRPORTS_SERVICE}}"
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -38,7 +38,7 @@ items:
           deploymentconfig: airports
       spec:
         containers:
-        - image: {{IMG_AIRPORTS_SERVICE}}:{{TAG_AIRPORTS_SERVICE}}
+        - image: {{IMG_AIRPORTS_SERVICE}}:{{CI_TAG_AIRPORTS_SERVICE}}
           name: airports
           resources:
             requests:
@@ -59,7 +59,7 @@ items:
         - airports
         from:
           kind: ImageStreamTag
-          name: airports:{{TAG_AIRPORTS_SERVICE}}
+          name: airports:{{CI_TAG_AIRPORTS_SERVICE}}
       type: ImageChange
   status: {}
 - apiVersion: v1
@@ -90,13 +90,13 @@ items:
   spec:
     tags:
     - annotations:
-        openshift.io/imported-from: {{IMG_FLIGHTS_SERVICE}}:{{TAG_FLIGHTS_SERVICE}}
+        openshift.io/imported-from: {{IMG_FLIGHTS_SERVICE}}:{{CI_TAG_FLIGHTS_SERVICE}}
       from:
         kind: DockerImage
-        name: {{IMG_FLIGHTS_SERVICE}}:{{TAG_FLIGHTS_SERVICE}}
+        name: {{IMG_FLIGHTS_SERVICE}}:{{CI_TAG_FLIGHTS_SERVICE}}
       generation: null
       importPolicy: {}
-      name: "{{TAG_FLIGHTS_SERVICE}}"
+      name: "{{CI_TAG_FLIGHTS_SERVICE}}"
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -117,7 +117,7 @@ items:
           deploymentconfig: flights
       spec:
         containers:
-        - image: {{IMG_FLIGHTS_SERVICE}}:{{TAG_FLIGHTS_SERVICE}}
+        - image: {{IMG_FLIGHTS_SERVICE}}:{{CI_TAG_FLIGHTS_SERVICE}}
           name: flights
           resources:
             requests:
@@ -138,7 +138,7 @@ items:
         - flights
         from:
           kind: ImageStreamTag
-          name: flights:{{TAG_FLIGHTS_SERVICE}}
+          name: flights:{{CI_TAG_FLIGHTS_SERVICE}}
       type: ImageChange
   status: {}
 - apiVersion: v1
@@ -169,13 +169,13 @@ items:
   spec:
     tags:
     - annotations:
-        openshift.io/imported-from: {{IMG_PRESENTATION_SERVICE}}:{{TAG_PRESENTATION_SERVICE}}
+        openshift.io/imported-from: {{IMG_PRESENTATION_SERVICE}}:{{CI_TAG_PRESENTATION_SERVICE}}
       from:
         kind: DockerImage
-        name: {{IMG_PRESENTATION_SERVICE}}:{{TAG_PRESENTATION_SERVICE}}
+        name: {{IMG_PRESENTATION_SERVICE}}:{{CI_TAG_PRESENTATION_SERVICE}}
       generation: null
       importPolicy: {}
-      name: "{{TAG_PRESENTATION_SERVICE}}"
+      name: "{{CI_TAG_PRESENTATION_SERVICE}}"
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -196,7 +196,7 @@ items:
           deploymentconfig: presentation
       spec:
         containers:
-        - image: {{IMG_PRESENTATION_SERVICE}}:{{TAG_PRESENTATION_SERVICE}}
+        - image: {{IMG_PRESENTATION_SERVICE}}:{{CI_TAG_PRESENTATION_SERVICE}}
           name: presentation
           resources:
             requests:
@@ -217,7 +217,7 @@ items:
         - presentation
         from:
           kind: ImageStreamTag
-          name: presentation:{{TAG_PRESENTATION_SERVICE}}
+          name: presentation:{{CI_TAG_PRESENTATION_SERVICE}}
       type: ImageChange
   status: {}
 - apiVersion: v1
@@ -248,13 +248,13 @@ items:
   spec:
     tags:
     - annotations:
-        openshift.io/imported-from: {{IMG_SALES_SERVICE}}:{{TAG_SALES_SERVICE}}
+        openshift.io/imported-from: {{IMG_SALES_SERVICE}}:{{CI_TAG_SALES_SERVICE}}
       from:
         kind: DockerImage
-        name: {{IMG_SALES_SERVICE}}:{{TAG_SALES_SERVICE}}
+        name: {{IMG_SALES_SERVICE}}:{{CI_TAG_SALES_SERVICE}}
       generation: null
       importPolicy: {}
-      name: "{{TAG_SALES_SERVICE}}"
+      name: "{{CI_TAG_SALES_SERVICE}}"
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -275,7 +275,7 @@ items:
           deploymentconfig: sales
       spec:
         containers:
-        - image: {{IMG_SALES_SERVICE}}:{{TAG_SALES_SERVICE}}
+        - image: {{IMG_SALES_SERVICE}}:{{CI_TAG_SALES_SERVICE}}
           name: sales
           resources:
             requests:
@@ -296,7 +296,7 @@ items:
         - sales
         from:
           kind: ImageStreamTag
-          name: sales:{{TAG_SALES_SERVICE}}
+          name: sales:{{CI_TAG_SALES_SERVICE}}
       type: ImageChange
   status: {}
 - apiVersion: v1
@@ -327,13 +327,13 @@ items:
   spec:
     tags:
     - annotations:
-        openshift.io/imported-from: {{IMG_SALESV2_SERVICE}}:{{TAG_SALESV2_SERVICE}}
+        openshift.io/imported-from: {{IMG_SALESV2_SERVICE}}:{{CI_TAG_SALESV2_SERVICE}}
       from:
         kind: DockerImage
-        name: {{IMG_SALESV2_SERVICE}}:{{TAG_SALESV2_SERVICE}}
+        name: {{IMG_SALESV2_SERVICE}}:{{CI_TAG_SALESV2_SERVICE}}
       generation: null
       importPolicy: {}
-      name: "{{TAG_SALESV2_SERVICE}}"
+      name: "{{CI_TAG_SALESV2_SERVICE}}"
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -354,7 +354,7 @@ items:
           deploymentconfig: salesv2
       spec:
         containers:
-        - image: {{IMG_SALESV2_SERVICE}}:{{TAG_SALESV2_SERVICE}}
+        - image: {{IMG_SALESV2_SERVICE}}:{{CI_TAG_SALESV2_SERVICE}}
           name: salesv2
           resources:
             requests:
@@ -375,7 +375,7 @@ items:
         - salesv2
         from:
           kind: ImageStreamTag
-          name: salesv2:{{TAG_SALESV2_SERVICE}}
+          name: salesv2:{{CI_TAG_SALESV2_SERVICE}}
       type: ImageChange
   status: {}
 - apiVersion: v1
@@ -486,13 +486,13 @@ items:
   spec:
     tags:
     - annotations:
-        openshift.io/imported-from: {{IMG_ZUUL_SERVICE}}:{{TAG_ZUUL_SERVICE}}
+        openshift.io/imported-from: {{IMG_ZUUL_SERVICE}}:{{CI_TAG_ZUUL_SERVICE}}
       from:
         kind: DockerImage
-        name: {{IMG_ZUUL_SERVICE}}:{{TAG_ZUUL_SERVICE}}
+        name: {{IMG_ZUUL_SERVICE}}:{{CI_TAG_ZUUL_SERVICE}}
       generation: null
       importPolicy: {}
-      name: "{{TAG_ZUUL_SERVICE}}"
+      name: "{{CI_TAG_ZUUL_SERVICE}}"
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -513,7 +513,7 @@ items:
           deploymentconfig: zuul
       spec:
         containers:
-        - image: {{IMG_ZUUL_SERVICE}}:{{TAG_ZUUL_SERVICE}}
+        - image: {{IMG_ZUUL_SERVICE}}:{{CI_TAG_ZUUL_SERVICE}}
           name: zuul
           resources:
             requests:
@@ -534,7 +534,7 @@ items:
         - zuul
         from:
           kind: ImageStreamTag
-          name: zuul:{{TAG_ZUUL_SERVICE}}
+          name: zuul:{{CI_TAG_ZUUL_SERVICE}}
       type: ImageChange
   status: {}
 - apiVersion: v1

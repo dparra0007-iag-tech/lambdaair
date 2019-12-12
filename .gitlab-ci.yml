@@ -567,7 +567,7 @@ push_zuul_service_binaries:
 
     - cp $DEPLOYMENT_FILE deployment-$CI_JOB_ID.yml
 
-    - sed -i -e "s/{{TAG_AIRPORTS_SERVICE}}/$CI_TAG_AIRPORTS_SERVICE/g" deployment-$CI_JOB_ID.yml
+    - sed -i -e "s/{{CI_TAG_AIRPORTS_SERVICE}}/$CI_TAG_AIRPORTS_SERVICE/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{CI_TAG_FLIGHTS_SERVICE}}/$CI_TAG_FLIGHTS_SERVICE/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{CI_TAG_PRESENTATION_SERVICE}}/$CI_TAG_PRESENTATION_SERVICE/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{CI_TAG_SALES_SERVICE}}/$CI_TAG_SALES_SERVICE/g" deployment-$CI_JOB_ID.yml
