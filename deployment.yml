@@ -1,5 +1,8 @@
 apiVersion: v1
 items:
+
+# ------ AIRPORTS -------
+
 - apiVersion: v1
   kind: ImageStream
   metadata:
@@ -73,6 +76,483 @@ items:
       deploymentconfig: airports
   status:
     loadBalancer: {}
+
+# ------ AIRPORTS -------
+
+
+# ------ FLIGHTS -------
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    name: flights
+  spec:
+    tags:
+    - annotations:
+        openshift.io/imported-from: {{IMG_FLIGHTS_SERVICE}}:{{TAG_FLIGHTS_SERVICE}}
+      from:
+        kind: DockerImage
+        name: {{IMG_FLIGHTS_SERVICE}}:{{TAG_FLIGHTS_SERVICE}}
+      generation: null
+      importPolicy: {}
+      name: "{{TAG_FLIGHTS_SERVICE}}"
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: flights
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: flights
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: flights
+      spec:
+        containers:
+        - image: {{IMG_FLIGHTS_SERVICE}}:{{TAG_FLIGHTS_SERVICE}}
+          name: flights
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - flights
+        from:
+          kind: ImageStreamTag
+          name: flights:{{TAG_FLIGHTS_SERVICE}}
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: flights
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      targetPort: 8080
+    selector:
+      deploymentconfig: flights
+  status:
+    loadBalancer: {}
+
+# ------ FLIGHTS -------
+
+
+# ------ PRESENTATION -------
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    name: presentation
+  spec:
+    tags:
+    - annotations:
+        openshift.io/imported-from: {{IMG_PRESENTATION_SERVICE}}:{{TAG_PRESENTATION_SERVICE}}
+      from:
+        kind: DockerImage
+        name: {{IMG_PRESENTATION_SERVICE}}:{{TAG_PRESENTATION_SERVICE}}
+      generation: null
+      importPolicy: {}
+      name: "{{TAG_PRESENTATION_SERVICE}}"
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: presentation
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: presentation
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: presentation
+      spec:
+        containers:
+        - image: {{IMG_PRESENTATION_SERVICE}}:{{TAG_PRESENTATION_SERVICE}}
+          name: presentation
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - presentation
+        from:
+          kind: ImageStreamTag
+          name: presentation:{{TAG_PRESENTATION_SERVICE}}
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: presentation
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      targetPort: 8080
+    selector:
+      deploymentconfig: presentation
+  status:
+    loadBalancer: {}
+
+# ------ PRESENTATION -------
+
+
+# ------ SALES -------
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    name: sales
+  spec:
+    tags:
+    - annotations:
+        openshift.io/imported-from: {{IMG_SALES_SERVICE}}:{{TAG_SALES_SERVICE}}
+      from:
+        kind: DockerImage
+        name: {{IMG_SALES_SERVICE}}:{{TAG_SALES_SERVICE}}
+      generation: null
+      importPolicy: {}
+      name: "{{TAG_SALES_SERVICE}}"
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: sales
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: sales
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: sales
+      spec:
+        containers:
+        - image: {{IMG_SALES_SERVICE}}:{{TAG_SALES_SERVICE}}
+          name: sales
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - sales
+        from:
+          kind: ImageStreamTag
+          name: sales:{{TAG_SALES_SERVICE}}
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: sales
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      targetPort: 8080
+    selector:
+      deploymentconfig: sales
+  status:
+    loadBalancer: {}
+
+# ------ SALES -------
+
+
+# ------ SALESV2 -------
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    name: salesv2
+  spec:
+    tags:
+    - annotations:
+        openshift.io/imported-from: {{IMG_SALESV2_SERVICE}}:{{TAG_SALESV2_SERVICE}}
+      from:
+        kind: DockerImage
+        name: {{IMG_SALESV2_SERVICE}}:{{TAG_SALESV2_SERVICE}}
+      generation: null
+      importPolicy: {}
+      name: "{{TAG_SALESV2_SERVICE}}"
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: salesv2
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: salesv2
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: salesv2
+      spec:
+        containers:
+        - image: {{IMG_SALESV2_SERVICE}}:{{TAG_SALESV2_SERVICE}}
+          name: salesv2
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - salesv2
+        from:
+          kind: ImageStreamTag
+          name: salesv2:{{TAG_SALESV2_SERVICE}}
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: salesv2
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      targetPort: 8080
+    selector:
+      deploymentconfig: salesv2
+  status:
+    loadBalancer: {}
+
+# ------ SALESV2 -------
+
+
+# ------ ZIPKIN -------
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    name: zipkin
+  spec:
+    tags:
+    - annotations:
+        openshift.io/imported-from: dparra0007/iag-gbs-it-architecture-technical-architecture-trace-global:60241962
+      from:
+        kind: DockerImage
+        name: dparra0007/iag-gbs-it-architecture-technical-architecture-trace-global:60241962
+      generation: null
+      importPolicy: {}
+      name: "60241962"
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: zipkin
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: zipkin
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: zipkin
+      spec:
+        containers:
+        - image: dparra0007/iag-gbs-it-architecture-technical-architecture-trace-global:60241962
+          name: zipkin
+          ports:
+          - containerPort: 9411
+          resources: {}
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - zipkin
+        from:
+          kind: ImageStreamTag
+          name: zipkin:60241962
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: zipkin
+  spec:
+    ports:
+    - name: 9411-tcp
+      port: 9411
+      targetPort: 9411
+    selector:
+      deploymentconfig: zipkin
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: zipkin
+  spec:
+    to:
+      kind: Service
+      name: zipkin
+
+# ------ ZIPKIN -------
+
+
+# ------ ZUUL -------
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    name: zuul
+  spec:
+    tags:
+    - annotations:
+        openshift.io/imported-from: {{IMG_ZUUL_SERVICE}}:{{TAG_ZUUL_SERVICE}}
+      from:
+        kind: DockerImage
+        name: {{IMG_ZUUL_SERVICE}}:{{TAG_ZUUL_SERVICE}}
+      generation: null
+      importPolicy: {}
+      name: "{{TAG_ZUUL_SERVICE}}"
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: zuul
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: zuul
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: zuul
+      spec:
+        containers:
+        - image: {{IMG_ZUUL_SERVICE}}:{{TAG_ZUUL_SERVICE}}
+          name: zuul
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - zuul
+        from:
+          kind: ImageStreamTag
+          name: zuul:{{TAG_ZUUL_SERVICE}}
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: zuul
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      targetPort: 8080
+    selector:
+      deploymentconfig: zuul
+  status:
+    loadBalancer: {}
+
+# ------ ZUUL -------
 
 kind: List
 metadata: {}
