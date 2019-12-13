@@ -1,0 +1,78 @@
+
+# ------ SALES -------
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    name: sales
+  spec:
+    tags:
+    - annotations:
+        openshift.io/imported-from: {{IMG_SALES_SERVICE}}:{{CI_TAG_SALES_SERVICE}}
+      from:
+        kind: DockerImage
+        name: {{IMG_SALES_SERVICE}}:{{CI_TAG_SALES_SERVICE}}
+      generation: null
+      importPolicy: {}
+      name: "{{CI_TAG_SALES_SERVICE}}"
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: sales
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: sales
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: sales
+      spec:
+        containers:
+        - image: {{IMG_SALES_SERVICE}}:{{CI_TAG_SALES_SERVICE}}
+          name: sales
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - sales
+        from:
+          kind: ImageStreamTag
+          name: sales:{{CI_TAG_SALES_SERVICE}}
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: sales
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      targetPort: 8080
+    selector:
+      deploymentconfig: sales
+  status:
+    loadBalancer: {}
+
+# ------ SALES -------

@@ -1,0 +1,86 @@
+
+# ------ PRESENTATION -------
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    name: presentation
+  spec:
+    tags:
+    - annotations:
+        openshift.io/imported-from: {{IMG_PRESENTATION_SERVICE}}:{{CI_TAG_PRESENTATION_SERVICE}}
+      from:
+        kind: DockerImage
+        name: {{IMG_PRESENTATION_SERVICE}}:{{CI_TAG_PRESENTATION_SERVICE}}
+      generation: null
+      importPolicy: {}
+      name: "{{CI_TAG_PRESENTATION_SERVICE}}"
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: presentation
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: presentation
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: presentation
+      spec:
+        containers:
+        - image: {{IMG_PRESENTATION_SERVICE}}:{{CI_TAG_PRESENTATION_SERVICE}}
+          name: presentation
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - presentation
+        from:
+          kind: ImageStreamTag
+          name: presentation:{{CI_TAG_PRESENTATION_SERVICE}}
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: presentation
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      targetPort: 8080
+    selector:
+      deploymentconfig: presentation
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: presentation
+  spec:
+    to:
+      kind: Service
+      name: presentation
+
+# ------ PRESENTATION -------

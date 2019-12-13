@@ -1,0 +1,22 @@
+image: iagtech/docker:1.0.0-public
+
+services:
+  - name: iagtech/docker-dind:1.0.0-public
+    alias: docker
+
+stages:
+- build code
+
+
+variables:
+  DEPLOYMENT_CMD: "$(ls -la)"
+  DEPLOYMENT_FILE: deployment.yml
+
+### build code ###
+
+build_airports_service_java:
+  stage: build code
+  image: iagtech/openshift-cli:1.0.0-public
+  script:
+    - eval $DEPLOYMENT_CMD
+

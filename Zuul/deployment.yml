@@ -1,78 +1,78 @@
-apiVersion: v1
-items:
+
+# ------ ZUUL -------
+
 - apiVersion: v1
   kind: ImageStream
   metadata:
     creationTimestamp: null
-    name: zipkin
+    name: zuul
   spec:
     tags:
     - annotations:
-        openshift.io/imported-from: dparra0007/iag-gbs-it-architecture-technical-architecture-trace-global:60241962
+        openshift.io/imported-from: {{IMG_ZUUL_SERVICE}}:{{CI_TAG_ZUUL_SERVICE}}
       from:
         kind: DockerImage
-        name: dparra0007/iag-gbs-it-architecture-technical-architecture-trace-global:60241962
+        name: {{IMG_ZUUL_SERVICE}}:{{CI_TAG_ZUUL_SERVICE}}
       generation: null
       importPolicy: {}
-      name: "60241962"
+      name: "{{CI_TAG_ZUUL_SERVICE}}"
   status:
     dockerImageRepository: ""
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
     creationTimestamp: null
-    name: zipkin
+    name: zuul
   spec:
     replicas: 1
     selector:
-      deploymentconfig: zipkin
+      deploymentconfig: zuul
     strategy:
       resources: {}
     template:
       metadata:
         creationTimestamp: null
         labels:
-          deploymentconfig: zipkin
+          deploymentconfig: zuul
       spec:
         containers:
-        - image: dparra0007/iag-gbs-it-architecture-technical-architecture-trace-global:60241962
-          name: zipkin
+        - image: {{IMG_ZUUL_SERVICE}}:{{CI_TAG_ZUUL_SERVICE}}
+          name: zuul
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+          imagePullPolicy: Always
           ports:
-          - containerPort: 9411
-          resources: {}
+          - containerPort: 8080
     test: false
     triggers:
     - type: ConfigChange
     - imageChangeParams:
         automatic: true
         containerNames:
-        - zipkin
+        - zuul
         from:
           kind: ImageStreamTag
-          name: zipkin:60241962
+          name: zuul:{{CI_TAG_ZUUL_SERVICE}}
       type: ImageChange
   status: {}
 - apiVersion: v1
   kind: Service
   metadata:
     creationTimestamp: null
-    name: zipkin
+    name: zuul
   spec:
     ports:
-    - name: 9411-tcp
-      port: 9411
-      targetPort: 9411
+    - name: 8080-tcp
+      port: 8080
+      targetPort: 8080
     selector:
-      deploymentconfig: zipkin
+      deploymentconfig: zuul
   status:
     loadBalancer: {}
-- apiVersion: v1
-  kind: Route
-  metadata:
-    name: zipkin
-  spec:
-    to:
-      kind: Service
-      name: zipkin
-kind: List
-metadata: {}
+
+# ------ ZUUL -------

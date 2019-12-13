@@ -1,0 +1,83 @@
+apiVersion: v1
+items:
+
+# ------ AIRPORTS -------
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    name: airports
+  spec:
+    tags:
+    - annotations:
+        openshift.io/imported-from: {{IMG_AIRPORTS_SERVICE}}:{{CI_TAG_AIRPORTS_SERVICE}}
+      from:
+        kind: DockerImage
+        name: {{IMG_AIRPORTS_SERVICE}}:{{CI_TAG_AIRPORTS_SERVICE}}
+      generation: null
+      importPolicy: {}
+      name: "{{CI_TAG_AIRPORTS_SERVICE}}"
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: airports
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: airports
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: airports
+      spec:
+        containers:
+        - image: {{IMG_AIRPORTS_SERVICE}}:{{CI_TAG_AIRPORTS_SERVICE}}
+          name: airports
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - airports
+        from:
+          kind: ImageStreamTag
+          name: airports:{{CI_TAG_AIRPORTS_SERVICE}}
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: airports
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      targetPort: 8080
+    selector:
+      deploymentconfig: airports
+  status:
+    loadBalancer: {}
+
+# ------ AIRPORTS -------
+
+kind: List
+metadata: {}

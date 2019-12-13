@@ -1,0 +1,78 @@
+
+# ------ SALESV2 -------
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    name: salesv2
+  spec:
+    tags:
+    - annotations:
+        openshift.io/imported-from: {{IMG_SALESV2_SERVICE}}:{{CI_TAG_SALESV2_SERVICE}}
+      from:
+        kind: DockerImage
+        name: {{IMG_SALESV2_SERVICE}}:{{CI_TAG_SALESV2_SERVICE}}
+      generation: null
+      importPolicy: {}
+      name: "{{CI_TAG_SALESV2_SERVICE}}"
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: salesv2
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: salesv2
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: salesv2
+      spec:
+        containers:
+        - image: {{IMG_SALESV2_SERVICE}}:{{CI_TAG_SALESV2_SERVICE}}
+          name: salesv2
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - salesv2
+        from:
+          kind: ImageStreamTag
+          name: salesv2:{{CI_TAG_SALESV2_SERVICE}}
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: salesv2
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      targetPort: 8080
+    selector:
+      deploymentconfig: salesv2
+  status:
+    loadBalancer: {}
+
+# ------ SALESV2 -------

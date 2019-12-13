@@ -234,6 +234,14 @@ items:
       deploymentconfig: presentation
   status:
     loadBalancer: {}
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: presentation
+  spec:
+    to:
+      kind: Service
+      name: presentation
 
 # ------ PRESENTATION -------
 
