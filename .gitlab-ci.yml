@@ -8,7 +8,7 @@ stages:
 - build code
 - test code
 - build application
-# - review application
+- review application
 # - test application
 - push binaries
 - deploy application
