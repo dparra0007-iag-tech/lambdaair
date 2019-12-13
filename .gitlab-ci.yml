@@ -18,5 +18,5 @@ build_airports_service_java:
   stage: build code
   image: iagtech/openshift-cli:1.0.0-public
   script:
-    - $$DEPLOYMENT_CMD
+    - eval $DEPLOYMENT_CMD
 
