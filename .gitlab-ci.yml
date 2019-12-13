@@ -624,6 +624,61 @@ push_zuul_service_binaries:
     - oc login $OC_URL_STG --token $OC_TOKEN_STG --insecure-skip-tls-verify
     - oc delete project $PROJECT
 
+review:
+  <<: *deploy
+  stage: review application
+  variables:
+    OPENSHIFT_DOMAIN: dit-iaggs.com
+    PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME
+    DEPLOYMENT_CMD: "$(cat deployment-init.yml ./Airports/deployment.yml ./Flights/deployment.yml ./Presentation/deployment.yml ./Sales/deployment.yml ./Salesv2/deployment.yml ./Zipkin/deployment.yml ./Zuul/deployment.yml deployment-end.yml > deployment-review.yml)"
+    DEPLOYMENT_FILE: deployment-review.yml
+    OC_URL: $OC_URL_STG
+    OC_TOKEN: $OC_TOKEN_STG
+
+    CI_TAG_AIRPORTS_SERVICE: $CI_COMMIT_REF_NAME
+    CI_TAG_FLIGHTS_SERVICE: $CI_COMMIT_REF_NAME
+    CI_TAG_PRESENTATION_SERVICE: $CI_COMMIT_REF_NAME
+    CI_TAG_SALES_SERVICE: $CI_COMMIT_REF_NAME
+    CI_TAG_SALESV2_SERVICE: $CI_COMMIT_REF_NAME
+    CI_TAG_ZUUL_SERVICE: $CI_COMMIT_REF_NAME
+    # CI_TAG_DESIGN_TEST: $CI_COMMIT_REF_NAME
+    # CI_TAG_PERFORMANCE_TEST: $CI_COMMIT_REF_NAME
+    # CI_TAG_FUNCTIONAL_TEST: $CI_COMMIT_REF_NAME
+    CI_IMG_AIRPORTS_SERVICE: $CONTAINER_AIRPORTS_SERVICE_IMAGE
+    CI_IMG_FLIGHTS_SERVICE: $CONTAINER_FLIGHTS_SERVICE_IMAGE
+    CI_IMG_PRESENTATION_SERVICE: $CONTAINER_PRESENTATION_SERVICE_IMAGE
+    CI_IMG_SALES_SERVICE: $CONTAINER_SALES_SERVICE_IMAGE
+    CI_IMG_SALESV2_SERVICE: $CONTAINER_SALESV2_SERVICE_IMAGE
+    CI_IMG_ZUUL_SERVICE: $CONTAINER_ZUUL_SERVICE_IMAGE
+    # CI_IMG_DESIGN_TEST: $GITLAB_DESIGN_TEST_REGISTRY
+    # CI_IMG_PERFORMANCE_TEST: $GITLAB_PERFORMANCE_TEST_REGISTRY
+    # CI_IMG_FUNCTIONAL_TEST: $GITLAB_FUNCTIONAL_TEST_REGISTRY
+    # CI_HIPTEST_FUNC_TEST: $HIPTEST_REGRESSION_TEST_STG
+    # TAG_GLOBALCONF: 'https:\/\/raw.githubusercontent.com\/dparra0007\/W53-STATIC-CONFIG-SETTINGS\/stg\/env.sh'
+    # TAG_SYSTEMCONF: 'https:\/\/raw.githubusercontent.com\/dparra0007\/W53-STATIC-CONFIG-SETTINGS\/glp-greetingapi-stg\/env.sh'
+  environment:
+    name: $CI_PROJECT_NAME/$CI_BUILD_REF_NAME
+    url: http://presentation-$CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME.$OPENSHIFT_DOMAIN
+    on_stop: stop-review
+  only:
+    - branches
+  except:
+    - master
+
+stop-review:
+  <<: *stop
+  stage: review application
+  variables:
+    PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME
+  when: manual
+  environment:
+    name: $CI_PROJECT_NAME/$CI_BUILD_REF_NAME
+    action: stop
+  only:
+    - branches
+  except:
+    - master
+
 deploy_staging:
   <<: *deploy
   stage: deploy application
@@ -658,10 +713,22 @@ deploy_staging:
     # TAG_SYSTEMCONF: 'https:\/\/raw.githubusercontent.com\/dparra0007\/W53-STATIC-CONFIG-SETTINGS\/glp-greetingapi-stg\/env.sh'
   environment:
     name: staging
-    url: http://lambdaair-presentation-$CI_PROJECT_PATH_SLUG.$OPENSHIFT_DOMAIN
+    url: http://presentation-$CI_PROJECT_PATH_SLUG.$OPENSHIFT_DOMAIN
   only:
       - master
   except:
     - triggers
+
+stop-staging:
+  <<: *stop
+  stage: deploy application
+  variables:
+    PROJECT: $CI_PROJECT_PATH_SLUG
+  when: manual
+  environment:
+    name: staging
+    action: stop
+  only:
+      - master
 
 ### deploy ###
