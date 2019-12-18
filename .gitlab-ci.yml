@@ -484,9 +484,11 @@ build_airport_service:
 
 build_airports_design_test:
   stage: build application
+  before_script:
+    - cd ./Design-test
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - docker build -t $GITLAB_AIRPORTS_DESIGN_TEST_REGISTRY -f ./Design-test/Dockerfile.airports
+    - docker build -t $GITLAB_AIRPORTS_DESIGN_TEST_REGISTRY -f Dockerfile.airports .
     - docker tag $GITLAB_AIRPORTS_DESIGN_TEST_REGISTRY $GITLAB_AIRPORTS_DESIGN_TEST_REGISTRY:$CI_COMMIT_REF_NAME
     - docker push $GITLAB_AIRPORTS_DESIGN_TEST_REGISTRY:$CI_COMMIT_REF_NAME
   except:
