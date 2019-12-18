@@ -753,7 +753,7 @@ validate_api_description:
   stage: test application
   variables:
     OPENSHIFT_DOMAIN: dit-iaggs.com
-    PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-Airports-design-test
+    PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-airports-design-test
     DEPLOYMENT_CMD: "$(cat deployment-init.yml ./Airports/deployment.yml ./Design-test/deployment.yml deployment-end.yml > deployment-design-test.yml)"
     DEPLOYMENT_FILE: deployment-design-test.yml
     OC_URL: $OC_URL_STG
