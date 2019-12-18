@@ -754,7 +754,7 @@ validate_api_description:
   variables:
     OPENSHIFT_DOMAIN: dit-iaggs.com
     PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-Airports-design-test
-    DEPLOYMENT_CMD: "$(cat deployment-init.yml ./Airports/deployment.yml ./Airports-design-test/deployment.yml deployment-end.yml > deployment-design-test.yml)"
+    DEPLOYMENT_CMD: "$(cat deployment-init.yml ./Airports/deployment.yml ./Design-test/deployment.yml deployment-end.yml > deployment-design-test.yml)"
     DEPLOYMENT_FILE: deployment-review.yml
     OC_URL: $OC_URL_STG
     OC_TOKEN: $OC_TOKEN_STG
