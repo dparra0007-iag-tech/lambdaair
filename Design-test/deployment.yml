@@ -1,0 +1,21 @@
+
+# ------ AIRPORTS DESIGN TEST -------
+
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: airports-design-test
+  spec:
+    parallelism: 1
+    completions: 1
+    template:
+      metadata:
+        name: airports-design-test
+      spec:
+        containers:
+        - name: airports-design-test
+          image: {{CI_IMG_AIRPORTS_DESIGN_TEST}}:{{CI_TAG_AIRPORTS_DESIGN_TEST}}
+          imagePullPolicy: Always
+        restartPolicy: Never
+
+# ------ AIRPORTS DESIGN TEST -------
