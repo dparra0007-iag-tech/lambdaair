@@ -767,7 +767,7 @@ stop-validate_api_description:
   <<: *stop
   stage: test application
   variables:
-    PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-airports-design-test
+    PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-design-test
   when: manual
   environment:
     name: $CI_PROJECT_NAME/$CI_BUILD_REF_NAME
