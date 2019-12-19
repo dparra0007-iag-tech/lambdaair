@@ -603,6 +603,7 @@ build_flights_design_test:
     # - sed -i -e "s/{{TAG_FUNCTIONAL_TEST}}/$CI_TAG_FUNCTIONAL_TEST/g" deployment-$CI_JOB_ID.yml
     # - sed -i -e "s/{{TAG_PERFORMANCE_TEST}}/$CI_TAG_PERFORMANCE_TEST/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{CI_TAG_AIRPORTS_DESIGN_TEST}}/$CI_TAG_AIRPORTS_DESIGN_TEST/g" deployment-$CI_JOB_ID.yml
+    - sed -i -e "s/{{CI_TAG_FLIGHTS_DESIGN_TEST}}/$CI_TAG_FLIGHTS_DESIGN_TEST/g" deployment-$CI_JOB_ID.yml
 
     - sed -i -e "s#{{IMG_AIRPORTS_SERVICE}}#$CI_IMG_AIRPORTS_SERVICE#g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s#{{IMG_FLIGHTS_SERVICE}}#$CI_IMG_FLIGHTS_SERVICE#g" deployment-$CI_JOB_ID.yml
@@ -613,6 +614,7 @@ build_flights_design_test:
     # - sed -i -e "s#{{IMG_FUNCTIONAL_TEST}}#$CI_IMG_FUNCTIONAL_TEST#g" deployment-$CI_JOB_ID.yml
     # - sed -i -e "s#{{IMG_PERFORMANCE_TEST}}#$CI_IMG_PERFORMANCE_TEST#g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s#{{CI_IMG_AIRPORTS_DESIGN_TEST}}#$CI_IMG_AIRPORTS_DESIGN_TEST#g" deployment-$CI_JOB_ID.yml
+    - sed -i -e "s#{{CI_IMG_FLIGHTS_DESIGN_TEST}}#$CI_IMG_FLIGHTS_DESIGN_TEST#g" deployment-$CI_JOB_ID.yml
 
     # - sed -i -e "s/{{TAG_GLOBALCONF}}/$TAG_GLOBALCONF/g" deployment-$CI_JOB_ID.yml
     # - sed -i -e "s/{{TAG_SYSTEMCONF}}/$TAG_SYSTEMCONF/g" deployment-$CI_JOB_ID.yml
@@ -780,7 +782,7 @@ validate_api_description:
   stage: test application
   variables:
     OPENSHIFT_DOMAIN: dit-iaggs.com
-    PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-airports-design-test
+    PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-design-test
     DEPLOYMENT_CMD: "$(cat deployment-init.yml ./Airports/deployment.yml ./Flights/deployment.yml ./Design-test/deployment.yml deployment-end.yml > deployment-design-test.yml)"
     DEPLOYMENT_FILE: deployment-design-test.yml
     OC_URL: $OC_URL_STG
@@ -800,7 +802,7 @@ validate_api_description:
     # CI_IMG_ZUUL_SERVICE: $GITLAB_ZUUL_SERVICE_REGISTRY
 
     CI_TAG_AIRPORTS_DESIGN_TEST: $CI_COMMIT_REF_NAME
-    CI_IMG_AIRPORTS_DESIGN_TEST: $GITLAB_FLIGHTS_DESIGN_TEST_REGISTRY
+    CI_IMG_AIRPORTS_DESIGN_TEST: $GITLAB_AIRPORTS_DESIGN_TEST_REGISTRY
     CI_TAG_FLIGHTS_DESIGN_TEST: $CI_COMMIT_REF_NAME
     CI_IMG_FLIGHTS_DESIGN_TEST: $GITLAB_FLIGHTS_DESIGN_TEST_REGISTRY
     
@@ -808,7 +810,7 @@ validate_api_description:
     TAG_SYSTEMCONF: 'https:\/\/raw.githubusercontent.com\/dparra0007\/W53-STATIC-CONFIG-SETTINGS\/glp-greetingapi-stg\/env.sh'
   environment:
     name: $CI_PROJECT_NAME/$CI_BUILD_REF_NAME
-    url: http://presentation-$CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-airports-design-test.$OPENSHIFT_DOMAIN
+    url: http://presentation-$CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-design-test.$OPENSHIFT_DOMAIN
     on_stop: stop-validate_api_description
   # when: manual
   except:
