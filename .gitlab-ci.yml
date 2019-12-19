@@ -30,6 +30,7 @@ variables:
   CONTAINER_SALESV2_SERVICE_IMAGE: lambdaair/salesv2
   CONTAINER_ZUUL_SERVICE_IMAGE: lambdaair/zuul
   GITLAB_AIRPORTS_DESIGN_TEST_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/design-test/airports
+  GITLAB_FLIGHTS_DESIGN_TEST_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/design-test/flights
   # URL_GLP_REGISTRY: https://iaghcp.jfrog.io/iaghcp/api/docker/docker-glp/v2/$IMAGE_NAME
 
 ### build code ###
@@ -494,6 +495,18 @@ build_airports_design_test:
   except:
     - triggers
 
+build_flights_design_test:
+  stage: build application
+  before_script:
+    - cd ./Design-test
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker build -t $GITLAB_FLIGHTS_DESIGN_TEST_REGISTRY -f Dockerfile.flights .
+    - docker tag $GITLAB_FLIGHTS_DESIGN_TEST_REGISTRY $GITLAB_FLIGHTS_DESIGN_TEST_REGISTRY:$CI_COMMIT_REF_NAME
+    - docker push $GITLAB_FLIGHTS_DESIGN_TEST_REGISTRY:$CI_COMMIT_REF_NAME
+  except:
+    - triggers
+
 ### build application ###
 
 ### push application ###
@@ -748,35 +761,55 @@ stop-review:
 
 ### test application ###
 
+stop-validate_api_description:
+  <<: *stop
+  stage: test application
+  variables:
+    PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-airports-design-test
+  when: manual
+  environment:
+    name: $CI_PROJECT_NAME/$CI_BUILD_REF_NAME
+    action: stop
+  only:
+    - branches
+  except:
+    - master
+
 validate_api_description:
   <<: *deploy
   stage: test application
   variables:
     OPENSHIFT_DOMAIN: dit-iaggs.com
     PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-airports-design-test
-    DEPLOYMENT_CMD: "$(cat deployment-init.yml ./Airports/deployment.yml ./Design-test/deployment.yml deployment-end.yml > deployment-design-test.yml)"
+    DEPLOYMENT_CMD: "$(cat deployment-init.yml ./Airports/deployment.yml ./Flights/deployment.yml ./Design-test/deployment.yml deployment-end.yml > deployment-design-test.yml)"
     DEPLOYMENT_FILE: deployment-design-test.yml
     OC_URL: $OC_URL_STG
     OC_TOKEN: $OC_TOKEN_STG
 
     CI_TAG_AIRPORTS_SERVICE: $CI_COMMIT_REF_NAME
-    # CI_TAG_FLIGHTS_SERVICE: $CI_COMMIT_REF_NAME
+    CI_TAG_FLIGHTS_SERVICE: $CI_COMMIT_REF_NAME
     # CI_TAG_PRESENTATION_SERVICE: $CI_COMMIT_REF_NAME
     # CI_TAG_SALES_SERVICE: $CI_COMMIT_REF_NAME
     # CI_TAG_SALESV2_SERVICE: $CI_COMMIT_REF_NAME
     # CI_TAG_ZUUL_SERVICE: $CI_COMMIT_REF_NAME
     CI_IMG_AIRPORTS_SERVICE: $GITLAB_AIRPORTS_SERVICE_REGISTRY
-    # CI_IMG_FLIGHTS_SERVICE: $GITLAB_FLIGHTS_SERVICE_REGISTRY
+    CI_IMG_FLIGHTS_SERVICE: $GITLAB_FLIGHTS_SERVICE_REGISTRY
     # CI_IMG_PRESENTATION_SERVICE: $GITLAB_PRESENTATION_SERVICE_REGISTRY
     # CI_IMG_SALES_SERVICE: $GITLAB_SALES_SERVICE_REGISTRY
     # CI_IMG_SALESV2_SERVICE: $GITLAB_SALESV2_SERVICE_REGISTRY
     # CI_IMG_ZUUL_SERVICE: $GITLAB_ZUUL_SERVICE_REGISTRY
 
     CI_TAG_AIRPORTS_DESIGN_TEST: $CI_COMMIT_REF_NAME
-    CI_IMG_AIRPORTS_DESIGN_TEST: $GITLAB_AIRPORTS_DESIGN_TEST_REGISTRY
+    CI_IMG_AIRPORTS_DESIGN_TEST: $GITLAB_FLIGHTS_DESIGN_TEST_REGISTRY
+    CI_TAG_FLIGHTS_DESIGN_TEST: $CI_COMMIT_REF_NAME
+    CI_IMG_FLIGHTS_DESIGN_TEST: $GITLAB_FLIGHTS_DESIGN_TEST_REGISTRY
     
     TAG_GLOBALCONF: 'https:\/\/raw.githubusercontent.com\/dparra0007\/W53-STATIC-CONFIG-SETTINGS\/stg\/env.sh'
     TAG_SYSTEMCONF: 'https:\/\/raw.githubusercontent.com\/dparra0007\/W53-STATIC-CONFIG-SETTINGS\/glp-greetingapi-stg\/env.sh'
+  environment:
+    name: $CI_PROJECT_NAME/$CI_BUILD_REF_NAME
+    url: http://presentation-$CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-airports-design-test.$OPENSHIFT_DOMAIN
+    on_stop: stop-validate_api_description
   # when: manual
   except:
     - triggers

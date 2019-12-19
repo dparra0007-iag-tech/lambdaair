@@ -19,3 +19,24 @@
         restartPolicy: Never
 
 # ------ AIRPORTS DESIGN TEST -------
+
+# ------ AIRPORTS DESIGN TEST -------
+
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: flights-design-test
+  spec:
+    parallelism: 1
+    completions: 1
+    template:
+      metadata:
+        name: flights-design-test
+      spec:
+        containers:
+        - name: flights-design-test
+          image: {{CI_IMG_FLIGHTS_DESIGN_TEST}}:{{CI_TAG_FLIGHTS_DESIGN_TEST}}
+          imagePullPolicy: Always
+        restartPolicy: Never
+
+# ------ AIRPORTS DESIGN TEST -------
