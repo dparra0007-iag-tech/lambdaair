@@ -11,6 +11,4 @@ WORKDIR /usr/src/app
 
 USER 1001
 
-# CMD ["/bin/sh", "-c", "sleep 2m && apiary fetch --api-name=glplambdaairflights --output=swagger.yaml && dredd ./swagger.yaml http://flights:8080/ -r apiary -j apiaryApiKey:bf50f24bdfc3dd2c747dc3c429b2b989 -j apiaryApiName:glplambdaairflights"]
-
-CMD ["/bin/sh", "-c", "sleep 2m && apiary fetch --api-name=glplambdaairflights --output=swagger.yaml && dredd ./swagger.yaml http://flights-iag-dev-glp-lambdaair.dit-iaggs.com/ -r apiary -j apiaryApiKey:bf50f24bdfc3dd2c747dc3c429b2b989 -j apiaryApiName:glplambdaairflights"]
+CMD ["/bin/sh", "-c", "sleep 2m && apiary fetch --api-name=glplambdaairflights --output=swagger.yaml && dredd ./swagger.yaml http://flights:8080/ -r apiary -j apiaryApiKey:bf50f24bdfc3dd2c747dc3c429b2b989 -j apiaryApiName:glplambdaairflights"]
