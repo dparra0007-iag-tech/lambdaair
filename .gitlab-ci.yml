@@ -31,6 +31,8 @@ variables:
   CONTAINER_ZUUL_SERVICE_IMAGE: lambdaair/zuul
   GITLAB_AIRPORTS_DESIGN_TEST_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/design-test/airports
   GITLAB_FLIGHTS_DESIGN_TEST_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/design-test/flights
+  GITLAB_AIRPORTS_FUNCTIONAL_TEST_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/functional-test/airports
+  GITLAB_FLIGHTS_FUNCTIONAL_TEST_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/functional-test/flights
   # URL_GLP_REGISTRY: https://iaghcp.jfrog.io/iaghcp/api/docker/docker-glp/v2/$IMAGE_NAME
 
 ### build code ###
@@ -507,6 +509,30 @@ build_flights_design_test:
   except:
     - triggers
 
+build_airports_functional_test:
+  stage: build application
+  before_script:
+    - cd ./Functional-test/Airports
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker build -t $GITLAB_AIRPORTS_FUNCTIONAL_TEST_REGISTRY .
+    - docker tag $GITLAB_AIRPORTS_FUNCTIONAL_TEST_REGISTRY $GITLAB_AIRPORTS_FUNCTIONAL_TEST_REGISTRY:$CI_COMMIT_REF_NAME
+    - docker push $GITLAB_AIRPORTS_FUNCTIONAL_TEST_REGISTRY:$CI_COMMIT_REF_NAME
+  except:
+    - triggers
+
+build_flights_functional_test:
+  stage: build application
+  before_script:
+    - cd ./Functional-test/Flights
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker build -t $GITLAB_FLIGHTS_FUNCTIONAL_TEST_REGISTRY .
+    - docker tag $GITLAB_FLIGHTS_FUNCTIONAL_TEST_REGISTRY $GITLAB_FLIGHTS_FUNCTIONAL_TEST_REGISTRY:$CI_COMMIT_REF_NAME
+    - docker push $GITLAB_FLIGHTS_FUNCTIONAL_TEST_REGISTRY:$CI_COMMIT_REF_NAME
+  except:
+    - triggers
+
 ### build application ###
 
 ### push application ###
@@ -600,7 +626,8 @@ push_zuul_service_binaries:
     - sed -i -e "s/{{CI_TAG_SALES_SERVICE}}/$CI_TAG_SALES_SERVICE/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{CI_TAG_SALESV2_SERVICE}}/$CI_TAG_SALESV2_SERVICE/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{CI_TAG_ZUUL_SERVICE}}/$CI_TAG_ZUUL_SERVICE/g" deployment-$CI_JOB_ID.yml
-    # - sed -i -e "s/{{TAG_FUNCTIONAL_TEST}}/$CI_TAG_FUNCTIONAL_TEST/g" deployment-$CI_JOB_ID.yml
+    - sed -i -e "s/{{CI_TAG_AIRPORTS_FUNCTIONAL_TEST}}/$CI_TAG_AIRPORTS_FUNCTIONAL_TEST/g" deployment-$CI_JOB_ID.yml
+    - sed -i -e "s/{{CI_TAG_FLIGHTS_FUNCTIONAL_TEST}}/$CI_TAG_FLIGHTS_FUNCTIONAL_TEST/g" deployment-$CI_JOB_ID.yml
     # - sed -i -e "s/{{TAG_PERFORMANCE_TEST}}/$CI_TAG_PERFORMANCE_TEST/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{CI_TAG_AIRPORTS_DESIGN_TEST}}/$CI_TAG_AIRPORTS_DESIGN_TEST/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{CI_TAG_FLIGHTS_DESIGN_TEST}}/$CI_TAG_FLIGHTS_DESIGN_TEST/g" deployment-$CI_JOB_ID.yml
@@ -611,10 +638,16 @@ push_zuul_service_binaries:
     - sed -i -e "s#{{IMG_SALES_SERVICE}}#$CI_IMG_SALES_SERVICE#g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s#{{IMG_SALESV2_SERVICE}}#$CI_IMG_SALESV2_SERVICE#g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s#{{IMG_ZUUL_SERVICE}}#$CI_IMG_ZUUL_SERVICE#g" deployment-$CI_JOB_ID.yml
-    # - sed -i -e "s#{{IMG_FUNCTIONAL_TEST}}#$CI_IMG_FUNCTIONAL_TEST#g" deployment-$CI_JOB_ID.yml
+
+    - sed -i -e "s#{{CI_IMG_AIRPORTS_FUNCTIONAL_TEST}}#$CI_IMG_AIRPORTS_FUNCTIONAL_TEST#g" deployment-$CI_JOB_ID.yml
+    - sed -i -e "s#{{CI_IMG_FLIGHTS_FUNCTIONAL_TEST}}#$CI_IMG_FLIGHTS_FUNCTIONAL_TEST#g" deployment-$CI_JOB_ID.yml
     # - sed -i -e "s#{{IMG_PERFORMANCE_TEST}}#$CI_IMG_PERFORMANCE_TEST#g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s#{{CI_IMG_AIRPORTS_DESIGN_TEST}}#$CI_IMG_AIRPORTS_DESIGN_TEST#g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s#{{CI_IMG_FLIGHTS_DESIGN_TEST}}#$CI_IMG_FLIGHTS_DESIGN_TEST#g" deployment-$CI_JOB_ID.yml
+    - sed -i -e "s/{{ENV_JIRA_CLIENT_ID}}/$CI_JIRA_CLIENT_ID/g" deployment-$CI_JOB_ID.yml
+    - sed -i -e "s/{{ENV_JIRA_SECRET_ID}}/$CI_JIRA_SECRET_ID/g" deployment-$CI_JOB_ID.yml
+    - sed -i -e "s/{{ENV_XRAY_AIRPORTS_FUNC_TEST}}/$CI_XRAY_AIRPORTS_FUNC_TEST/g" deployment-$CI_JOB_ID.yml
+    - sed -i -e "s/{{ENV_XRAY_FLIGHTS_FUNC_TEST}}/$CI_XRAY_FLIGHTS_FUNC_TEST/g" deployment-$CI_JOB_ID.yml
 
     # - sed -i -e "s/{{TAG_GLOBALCONF}}/$TAG_GLOBALCONF/g" deployment-$CI_JOB_ID.yml
     # - sed -i -e "s/{{TAG_SYSTEMCONF}}/$TAG_SYSTEMCONF/g" deployment-$CI_JOB_ID.yml
@@ -809,6 +842,61 @@ validate_api_description:
   environment:
     name: $CI_PROJECT_NAME/$CI_BUILD_REF_NAME
     url: http://presentation-$CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-design-test.$OPENSHIFT_DOMAIN
+    on_stop: stop-validate_api_description
+  # when: manual
+  except:
+    - triggers
+
+stop-functional_test:
+  <<: *stop
+  stage: test application
+  variables:
+    PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-functional-test
+  when: manual
+  environment:
+    name: $CI_PROJECT_NAME/$CI_BUILD_REF_NAME
+    action: stop
+  except:
+    - triggers
+
+functional_test:
+  <<: *deploy
+  stage: test application
+  variables:
+    OPENSHIFT_DOMAIN: dit-iaggs.com
+    PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-functional-test
+    DEPLOYMENT_CMD: "$(cat deployment-init.yml ./Airports/deployment.yml ./Flights/deployment.yml ./Zuul/deployment.yml ./Functional-test/deployment.yml deployment-end.yml > deployment-functional-test.yml)"
+    DEPLOYMENT_FILE: deployment-functional-test.yml
+    OC_URL: $OC_URL_STG
+    OC_TOKEN: $OC_TOKEN_STG
+
+    CI_TAG_AIRPORTS_SERVICE: $CI_COMMIT_REF_NAME
+    CI_TAG_FLIGHTS_SERVICE: $CI_COMMIT_REF_NAME
+    # CI_TAG_PRESENTATION_SERVICE: $CI_COMMIT_REF_NAME
+    # CI_TAG_SALES_SERVICE: $CI_COMMIT_REF_NAME
+    # CI_TAG_SALESV2_SERVICE: $CI_COMMIT_REF_NAME
+    CI_TAG_ZUUL_SERVICE: $CI_COMMIT_REF_NAME
+    CI_IMG_AIRPORTS_SERVICE: $GITLAB_AIRPORTS_SERVICE_REGISTRY
+    CI_IMG_FLIGHTS_SERVICE: $GITLAB_FLIGHTS_SERVICE_REGISTRY
+    # CI_IMG_PRESENTATION_SERVICE: $GITLAB_PRESENTATION_SERVICE_REGISTRY
+    # CI_IMG_SALES_SERVICE: $GITLAB_SALES_SERVICE_REGISTRY
+    # CI_IMG_SALESV2_SERVICE: $GITLAB_SALESV2_SERVICE_REGISTRY
+    CI_IMG_ZUUL_SERVICE: $GITLAB_ZUUL_SERVICE_REGISTRY
+
+    CI_TAG_AIRPORTS_FUNCTIONAL_TEST: $CI_COMMIT_REF_NAME
+    CI_IMG_AIRPORTS_FUNCTIONAL_TEST: $GITLAB_AIRPORTS_FUNCTIONAL_TEST_REGISTRY
+    CI_TAG_FLIGHTS_FUNCTIONAL_TEST: $CI_COMMIT_REF_NAME
+    CI_IMG_FLIGHTS_FUNCTIONAL_TEST: $GITLAB_FLIGHTS_FUNCTIONAL_TEST_REGISTRY
+    CI_JIRA_CLIENT_ID: $JIRA_CLIENT_ID
+    CI_JIRA_SECRET_ID: $JIRA_SECRET_ID
+    CI_XRAY_AIRPORTS_FUNC_TEST: GL-9
+    CI_XRAY_FLIGHTS_FUNC_TEST: GL-10
+    
+    TAG_GLOBALCONF: 'https:\/\/raw.githubusercontent.com\/dparra0007\/W53-STATIC-CONFIG-SETTINGS\/stg\/env.sh'
+    TAG_SYSTEMCONF: 'https:\/\/raw.githubusercontent.com\/dparra0007\/W53-STATIC-CONFIG-SETTINGS\/glp-greetingapi-stg\/env.sh'
+  environment:
+    name: $CI_PROJECT_NAME/$CI_BUILD_REF_NAME
+    url: http://presentation-$CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-functional-test.$OPENSHIFT_DOMAIN
     on_stop: stop-validate_api_description
   # when: manual
   except:

@@ -1,0 +1,58 @@
+
+# ------ AIRPORTS FUNCTIONAL TEST -------
+
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: airports-functional-test
+  spec:
+    parallelism: 1
+    completions: 1
+    template:
+      metadata:
+        name: airports-functional-test
+      spec:
+        containers:
+        - name: airports-functional-test
+          image: {{CI_IMG_AIRPORTS_FUNCTIONAL_TEST}}:{{CI_TAG_AIRPORTS_FUNCTIONAL_TEST}}
+          imagePullPolicy: Always
+          command: ["./start.sh"]
+          env:
+          - name: JIRA_CLIENT_ID
+            value: '{{ENV_JIRA_CLIENT_ID}}'
+          - name: JIRA_SECRET_ID
+            value: '{{ENV_JIRA_SECRET_ID}}'
+          - name: XRAY_FUNC_TEST
+            value: '{{ENV_XRAY_AIRPORTS_FUNC_TEST}}'
+        restartPolicy: Never
+
+# ------ AIRPORTS FUNCTIONAL TEST -------
+
+# ------ AIRPORTS FUNCTIONAL TEST -------
+
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: flights-functional-test
+  spec:
+    parallelism: 1
+    completions: 1
+    template:
+      metadata:
+        name: flights-functional-test
+      spec:
+        containers:
+        - name: flights-functional-test
+          image: {{CI_IMG_FLIGHTS_FUNCTIONAL_TEST}}:{{CI_TAG_FLIGHTS_FUNCTIONAL_TEST}}
+          imagePullPolicy: Always
+          command: ["./start.sh"]
+          env:
+          - name: JIRA_CLIENT_ID
+            value: '{{ENV_JIRA_CLIENT_ID}}'
+          - name: JIRA_SECRET_ID
+            value: '{{ENV_JIRA_SECRET_ID}}'
+          - name: XRAY_FUNC_TEST
+            value: '{{ENV_XRAY_FLIGHTS_FUNC_TEST}}'
+        restartPolicy: Never
+
+# ------ AIRPORTS FUNCTIONAL TEST -------
