@@ -1,4 +1,4 @@
-FROM iagtech/newman:1.2.0-public
+FROM iagtech/newman:1.0.0-public
 
 RUN mkdir -p /usr/src/app && \
     addgroup -g 1000 -S username && \
