@@ -10,4 +10,4 @@ sed -i -e 's/<testcase/<testcase classname=\"CI.GLPLAMBDAAIR\"/g' outputfile.xml
 
 export token=$(curl -H "Content-Type: application/json" -X POST --data "{ \"client_id\": \"BFA4CE54FF254CA99431F2553C992A48\",\"client_secret\": \"8bf82f7dc63f8513a6c29c8088400e825930602e48c99bfa501fcef0708fd5a1\" }" https://xray.cloud.xpand-it.com/api/v1/authenticate| tr -d '"')
 
-curl -H "Content-Type: text/xml" -X POST -H "Authorization: Bearer $token" --data @"outputfile.xml" https://xray.cloud.xpand-it.com/api/v1/import/execution/junit?testExecKey=GL-9
+curl -H "Content-Type: text/xml" -X POST -H "Authorization: Bearer $token" --data @"outputfile.xml" https://xray.cloud.xpand-it.com/api/v1/import/execution/junit?testExecKey=$ENV_XRAY_AIRPORTS_FUNC_TEST
