@@ -7,7 +7,7 @@ RUN mkdir -p /usr/src/app && \
 
 WORKDIR /usr/src/app
 
-ADD start.sh start.sh
+ADD . /usr/src/app
 RUN chmod +x ./start.sh
 
 USER 1001
