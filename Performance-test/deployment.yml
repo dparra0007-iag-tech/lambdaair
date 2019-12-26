@@ -16,7 +16,6 @@
         - name: airports-performance-test
           image: {{CI_IMG_AIRPORTS_PERFORMANCE_TEST}}:{{CI_TAG_AIRPORTS_PERFORMANCE_TEST}}
           imagePullPolicy: Always
-          command: ["./start.sh"]
           env:
           - name: JIRA_CLIENT_ID
             value: '{{ENV_JIRA_CLIENT_ID}}'
