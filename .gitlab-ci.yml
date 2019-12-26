@@ -33,6 +33,8 @@ variables:
   GITLAB_FLIGHTS_DESIGN_TEST_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/design-test/flights
   GITLAB_AIRPORTS_FUNCTIONAL_TEST_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/functional-test/airports
   GITLAB_FLIGHTS_FUNCTIONAL_TEST_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/functional-test/flights
+  GITLAB_AIRPORTS_PERFORMANCE_TEST_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/performance-test/airports
+  # GITLAB_FLIGHTS_PERFORMANCE_TEST_REGISTRY: registry.gitlab.com/iag-dev/glp/lambdaair/performance-test/flights
   # URL_GLP_REGISTRY: https://iaghcp.jfrog.io/iaghcp/api/docker/docker-glp/v2/$IMAGE_NAME
 
 ### build code ###
@@ -533,6 +535,18 @@ build_flights_functional_test:
   except:
     - triggers
 
+build_airports_performance_test:
+  stage: build application
+  before_script:
+    - cd ./Performance-test/Airports
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker build -t $GITLAB_AIRPORTS_PERFORMANCE_TEST_REGISTRY .
+    - docker tag $GITLAB_AIRPORTS_PERFORMANCE_TEST_REGISTRY $GITLAB_AIRPORTS_PERFORMANCE_TEST_REGISTRY:$CI_COMMIT_REF_NAME
+    - docker push $GITLAB_AIRPORTS_PERFORMANCE_TEST_REGISTRY:$CI_COMMIT_REF_NAME
+  except:
+    - triggers
+
 ### build application ###
 
 ### push application ###
@@ -628,7 +642,8 @@ push_zuul_service_binaries:
     - sed -i -e "s/{{CI_TAG_ZUUL_SERVICE}}/$CI_TAG_ZUUL_SERVICE/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{CI_TAG_AIRPORTS_FUNCTIONAL_TEST}}/$CI_TAG_AIRPORTS_FUNCTIONAL_TEST/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{CI_TAG_FLIGHTS_FUNCTIONAL_TEST}}/$CI_TAG_FLIGHTS_FUNCTIONAL_TEST/g" deployment-$CI_JOB_ID.yml
-    # - sed -i -e "s/{{TAG_PERFORMANCE_TEST}}/$CI_TAG_PERFORMANCE_TEST/g" deployment-$CI_JOB_ID.yml
+    - sed -i -e "s/{{CI_TAG_AIRPORTS_PERFORMANCE_TEST}}/$CI_TAG_AIRPORTS_PERFORMANCE_TEST/g" deployment-$CI_JOB_ID.yml
+    # - sed -i -e "s/{{CI_TAG_FLIGHTS_PERFORMANCE_TEST}}/$CI_TAG_FLIGHTS_PERFORMANCE_TEST/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{CI_TAG_AIRPORTS_DESIGN_TEST}}/$CI_TAG_AIRPORTS_DESIGN_TEST/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{CI_TAG_FLIGHTS_DESIGN_TEST}}/$CI_TAG_FLIGHTS_DESIGN_TEST/g" deployment-$CI_JOB_ID.yml
 
@@ -641,13 +656,16 @@ push_zuul_service_binaries:
 
     - sed -i -e "s#{{CI_IMG_AIRPORTS_FUNCTIONAL_TEST}}#$CI_IMG_AIRPORTS_FUNCTIONAL_TEST#g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s#{{CI_IMG_FLIGHTS_FUNCTIONAL_TEST}}#$CI_IMG_FLIGHTS_FUNCTIONAL_TEST#g" deployment-$CI_JOB_ID.yml
-    # - sed -i -e "s#{{IMG_PERFORMANCE_TEST}}#$CI_IMG_PERFORMANCE_TEST#g" deployment-$CI_JOB_ID.yml
+    - sed -i -e "s#{{CI_IMG_AIRPORTS_PERFORMANCE_TEST}}#$CI_IMG_AIRPORTS_PERFORMANCE_TEST#g" deployment-$CI_JOB_ID.yml
+    # - sed -i -e "s#{{CI_IMG_FLIGHTS_PERFORMANCE_TEST}}#$CI_IMG_FLIGHTS_PERFORMANCE_TEST#g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s#{{CI_IMG_AIRPORTS_DESIGN_TEST}}#$CI_IMG_AIRPORTS_DESIGN_TEST#g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s#{{CI_IMG_FLIGHTS_DESIGN_TEST}}#$CI_IMG_FLIGHTS_DESIGN_TEST#g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{ENV_JIRA_CLIENT_ID}}/$CI_JIRA_CLIENT_ID/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{ENV_JIRA_SECRET_ID}}/$CI_JIRA_SECRET_ID/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{ENV_XRAY_AIRPORTS_FUNC_TEST}}/$CI_XRAY_AIRPORTS_FUNC_TEST/g" deployment-$CI_JOB_ID.yml
     - sed -i -e "s/{{ENV_XRAY_FLIGHTS_FUNC_TEST}}/$CI_XRAY_FLIGHTS_FUNC_TEST/g" deployment-$CI_JOB_ID.yml
+    - sed -i -e "s/{{ENV_XRAY_AIRPORTS_PERF_TEST}}/$CI_XRAY_AIRPORTS_PERF_TEST/g" deployment-$CI_JOB_ID.yml
+    # - sed -i -e "s/{{ENV_XRAY_FLIGHTS_PERF_TEST}}/$CI_XRAY_FLIGHTS_PERF_TEST/g" deployment-$CI_JOB_ID.yml
 
     # - sed -i -e "s/{{TAG_GLOBALCONF}}/$TAG_GLOBALCONF/g" deployment-$CI_JOB_ID.yml
     # - sed -i -e "s/{{TAG_SYSTEMCONF}}/$TAG_SYSTEMCONF/g" deployment-$CI_JOB_ID.yml
@@ -655,6 +673,8 @@ push_zuul_service_binaries:
     # - sed -i -e "s/{{ENV_HIPTEST_TOKEN}}/$HIPTEST_TOKEN/g" deployment-$CI_JOB_ID.yml
     # - sed -i -e "s/{{ENV_HIPTEST_FUNC_TEST}}/$CI_HIPTEST_FUNC_TEST/g" deployment-$CI_JOB_ID.yml
     # - sed -i -e "s/{{ENV_HIPTEST_PERF_TEST}}/$CI_HIPTEST_PERF_TEST/g" deployment-$CI_JOB_ID.yml
+
+    - sed -i -e "s/{{ENV_TEST_NUMBER}}/$CI_COMMIT_SHA/g" deployment-$CI_JOB_ID.yml
 
     - oc login $OC_URL --token $OC_TOKEN --insecure-skip-tls-verify
     - oc project "$PROJECT" 2> /dev/null || oc new-project "$PROJECT"
@@ -891,6 +911,61 @@ functional_test:
     CI_JIRA_SECRET_ID: $JIRA_SECRET_ID
     CI_XRAY_AIRPORTS_FUNC_TEST: GL-9
     CI_XRAY_FLIGHTS_FUNC_TEST: GL-10
+    
+    TAG_GLOBALCONF: 'https:\/\/raw.githubusercontent.com\/dparra0007\/W53-STATIC-CONFIG-SETTINGS\/stg\/env.sh'
+    TAG_SYSTEMCONF: 'https:\/\/raw.githubusercontent.com\/dparra0007\/W53-STATIC-CONFIG-SETTINGS\/glp-greetingapi-stg\/env.sh'
+  environment:
+    name: $CI_PROJECT_NAME/$CI_BUILD_REF_NAME
+    url: http://presentation-$CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-functional-test.$OPENSHIFT_DOMAIN
+    on_stop: stop-validate_api_description
+  # when: manual
+  except:
+    - triggers
+
+stop-performance_test:
+  <<: *stop
+  stage: test application
+  variables:
+    PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-performance-test
+  when: manual
+  environment:
+    name: $CI_PROJECT_NAME/$CI_BUILD_REF_NAME
+    action: stop
+  except:
+    - triggers
+
+performance_test:
+  <<: *deploy
+  stage: test application
+  variables:
+    OPENSHIFT_DOMAIN: dit-iaggs.com
+    PROJECT: $CI_PROJECT_PATH_SLUG-$CI_BUILD_REF_NAME-performance-test
+    DEPLOYMENT_CMD: "$(cat deployment-init.yml ./Airports/deployment.yml ./Zuul/deployment.yml ./Performance-test/deployment.yml deployment-end.yml > deployment-performance-test.yml)"
+    DEPLOYMENT_FILE: deployment-performance-test.yml
+    OC_URL: $OC_URL_STG
+    OC_TOKEN: $OC_TOKEN_STG
+
+    CI_TAG_AIRPORTS_SERVICE: $CI_COMMIT_REF_NAME
+    # CI_TAG_FLIGHTS_SERVICE: $CI_COMMIT_REF_NAME
+    # CI_TAG_PRESENTATION_SERVICE: $CI_COMMIT_REF_NAME
+    # CI_TAG_SALES_SERVICE: $CI_COMMIT_REF_NAME
+    # CI_TAG_SALESV2_SERVICE: $CI_COMMIT_REF_NAME
+    CI_TAG_ZUUL_SERVICE: $CI_COMMIT_REF_NAME
+    CI_IMG_AIRPORTS_SERVICE: $GITLAB_AIRPORTS_SERVICE_REGISTRY
+    # CI_IMG_FLIGHTS_SERVICE: $GITLAB_FLIGHTS_SERVICE_REGISTRY
+    # CI_IMG_PRESENTATION_SERVICE: $GITLAB_PRESENTATION_SERVICE_REGISTRY
+    # CI_IMG_SALES_SERVICE: $GITLAB_SALES_SERVICE_REGISTRY
+    # CI_IMG_SALESV2_SERVICE: $GITLAB_SALESV2_SERVICE_REGISTRY
+    CI_IMG_ZUUL_SERVICE: $GITLAB_ZUUL_SERVICE_REGISTRY
+
+    CI_TAG_AIRPORTS_PERFORMANCE_TEST: $CI_COMMIT_REF_NAME
+    CI_IMG_AIRPORTS_PERFORMANCE_TEST: $GITLAB_AIRPORTS_PERFORMANCE_TEST_REGISTRY
+    # CI_TAG_FLIGHTS_FUNCTIONAL_TEST: $CI_COMMIT_REF_NAME
+    # CI_IMG_FLIGHTS_FUNCTIONAL_TEST: $GITLAB_FLIGHTS_FUNCTIONAL_TEST_REGISTRY
+    CI_JIRA_CLIENT_ID: $JIRA_CLIENT_ID
+    CI_JIRA_SECRET_ID: $JIRA_SECRET_ID
+    CI_XRAY_AIRPORTS_PERF_TEST: GL-14
+    # CI_XRAY_FLIGHTS_PERF_TEST: GL-10
     
     TAG_GLOBALCONF: 'https:\/\/raw.githubusercontent.com\/dparra0007\/W53-STATIC-CONFIG-SETTINGS\/stg\/env.sh'
     TAG_SYSTEMCONF: 'https:\/\/raw.githubusercontent.com\/dparra0007\/W53-STATIC-CONFIG-SETTINGS\/glp-greetingapi-stg\/env.sh'

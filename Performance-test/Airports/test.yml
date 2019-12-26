@@ -1,0 +1,26 @@
+execution:
+- executor: newman
+  iterations: 5
+  scenario: simple
+
+scenarios:
+  simple:
+    script: collection.json
+    environment: ci.json
+    think-time: 0.75
+    globals:
+      test_type: performance
+
+modules:
+  blazemeter:
+    # token: 2c24146301d8c02466a79366:d5861138ddde70b091d76ac488df24f47491d9a0282900aa7a29e1c7b40157fab8a5c95e
+    token: 76ce8e49694f1902ade67df0:7e8f9a7171dfc9cac762221605a2000447bd03140eaed57bf8621db8a61eff60d86d3ff6
+  newman:
+    tools-dir: /usr/src/app
+
+reporting:
+- module: blazemeter
+  test: CI
+  project: LAMBDAAIR
+- module: junit-xml
+  filename: ./outputfile.xml

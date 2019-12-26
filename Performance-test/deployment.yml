@@ -1,0 +1,31 @@
+
+# ------ AIRPORTS PERFORMANCE TEST -------
+
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: airports-performance-test
+  spec:
+    parallelism: 1
+    completions: 1
+    template:
+      metadata:
+        name: airports-performance-test
+      spec:
+        containers:
+        - name: airports-performance-test
+          image: {{CI_IMG_AIRPORTS_PERFORMANCE_TEST}}:{{CI_TAG_AIRPORTS_PERFORMANCE_TEST}}
+          imagePullPolicy: Always
+          command: ["./start.sh"]
+          env:
+          - name: JIRA_CLIENT_ID
+            value: '{{ENV_JIRA_CLIENT_ID}}'
+          - name: JIRA_SECRET_ID
+            value: '{{ENV_JIRA_SECRET_ID}}'
+          - name: XRAY_PERF_TEST
+            value: '{{ENV_XRAY_AIRPORTS_PERF_TEST}}'
+          - name: REPORT
+            value: '{{ENV_TEST_NUMBER}}'
+        restartPolicy: Never
+
+# ------ AIRPORTS PERFORMANCE TEST -------
